@@ -21,9 +21,22 @@ async def enter_serial(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
         data["serial"] = answer
 
+    await message.answer("Сделайте фотографию внешнего вида интерактивной панели и отправьте её сюда:")
+
+    await InteractivePanels.next()
+
+
+@dp.message_handler(state=InteractivePanels.Photo, content_types=['photo'])
+async def save_photo(message: types.Message, state: FSMContext):
+    async with state.proxy() as data:
+        data["photo"] = f'{data["serial"]}.jpg'
+    await message.photo[-1].download(f'photos/{data["serial"]}.jpg')
+    print(data)
+
     await message.answer(file_system.read('interactivePanels')['1'], reply_markup=yes_no)
 
     await InteractivePanels.next()
+
 
 
 @dp.message_handler(state=InteractivePanels.Q1)
