@@ -1,4 +1,5 @@
 from aiogram import types
+from aiogram.types import Message, ReplyKeyboardRemove
 from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters import Command
 
