@@ -32,9 +32,11 @@ async def save_photo(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
         data["photo"] = f'{data["serial"]}.jpg'
     await message.photo[-1].download(f'photos/{data["serial"]}.jpg')
-    print(data)
 
-    await message.answer(file_system.read('interactivePanels')['1'][1], reply_markup=yes_no)
+    if "yes_no" in file_system.read('interactivePanels')['1'][0]:
+        await message.answer(file_system.read('interactivePanels')['1'][1], reply_markup=yes_no)
+    else:
+        await message.answer(file_system.read('interactivePanels')['1'][1], reply_markup=ReplyKeyboardRemove())
 
     await InteractivePanels.next()
 
@@ -909,3 +911,17 @@ async def answer_q67(message: types.Message, state: FSMContext):
         await message.answer(file_system.read('interactivePanels')['68'][1], reply_markup=ReplyKeyboardRemove())
 
     await InteractivePanels.next()
+
+@dp.message_handler(state=InteractivePanels.End)
+async def end_test(message: types.Message, state: FSMContext):
+    answer = message.text
+    async with state.proxy() as data:
+        data['Q68'] = answer
+
+    data = await state.get_data()
+    print(data)
+
+    await message.answer(f"Экспертиза панели с серийным номером {data['serial']} завершена\n"
+                            "Для проведения другой интерактивной панели выберите команду /test")
+
+    await state.finish()

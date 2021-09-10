@@ -71,4 +71,4 @@ class InteractivePanels(StatesGroup):
     Q65 = State()
     Q66 = State()
     Q67 = State()
-    Q68 = State()
+    end = State()
