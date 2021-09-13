@@ -8,6 +8,8 @@ from loader import dp
 from states.interactivePanels import InteractivePanels
 from keyboards.keyboards import *
 
+from datetime import datetime
+
 
 @dp.message_handler(commands=['test'])
 async def enter_test(message: types.Message):
@@ -19,7 +21,11 @@ async def enter_test(message: types.Message):
 @dp.message_handler(state=InteractivePanels.Serial)
 async def enter_serial(message: types.Message, state: FSMContext):
     answer = message.text
+    date = datetime.now().strftime("%d.%m.%Y, %H:%M:%S")
+    type = "Интерактивная панель"
     async with state.proxy() as data:
+        data["date"] = date
+        data["type"] = type
         data["serial"] = answer
 
     await message.answer("Сделайте фотографию внешнего вида интерактивной панели и отправьте её сюда:")
@@ -840,7 +846,7 @@ async def answer_q61(message: types.Message, state: FSMContext):
 async def end_test(message: types.Message, state: FSMContext):
     answer = message.text
     async with state.proxy() as data:
-        data['Q68'] = answer
+        data['Q62'] = answer
 
     data = await state.get_data()
     print(data)
