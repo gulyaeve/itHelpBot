@@ -834,83 +834,7 @@ async def answer_q61(message: types.Message, state: FSMContext):
 
     await InteractivePanels.next()
 
-@dp.message_handler(state=InteractivePanels.Q62)
-async def answer_q62(message: types.Message, state: FSMContext):
-    answer = message.text
-    async with state.proxy() as data:
-        data['Q62'] = answer
 
-    if "yes_no" in file_system.read('interactivePanels')['63'][0]:
-        await message.answer(file_system.read('interactivePanels')['63'][1], reply_markup=yes_no)
-    else:
-        await message.answer(file_system.read('interactivePanels')['63'][1], reply_markup=ReplyKeyboardRemove())
-
-    await InteractivePanels.next()
-
-@dp.message_handler(state=InteractivePanels.Q63)
-async def answer_q63(message: types.Message, state: FSMContext):
-    answer = message.text
-    async with state.proxy() as data:
-        data['Q63'] = answer
-
-    if "yes_no" in file_system.read('interactivePanels')['64'][0]:
-        await message.answer(file_system.read('interactivePanels')['64'][1], reply_markup=yes_no)
-    else:
-        await message.answer(file_system.read('interactivePanels')['64'][1], reply_markup=ReplyKeyboardRemove())
-
-    await InteractivePanels.next()
-
-@dp.message_handler(state=InteractivePanels.Q64)
-async def answer_q64(message: types.Message, state: FSMContext):
-    answer = message.text
-    async with state.proxy() as data:
-        data['Q64'] = answer
-
-    if "yes_no" in file_system.read('interactivePanels')['65'][0]:
-        await message.answer(file_system.read('interactivePanels')['65'][1], reply_markup=yes_no)
-    else:
-        await message.answer(file_system.read('interactivePanels')['65'][1], reply_markup=ReplyKeyboardRemove())
-
-    await InteractivePanels.next()
-
-@dp.message_handler(state=InteractivePanels.Q65)
-async def answer_q65(message: types.Message, state: FSMContext):
-    answer = message.text
-    async with state.proxy() as data:
-        data['Q65'] = answer
-
-    if "yes_no" in file_system.read('interactivePanels')['66'][0]:
-        await message.answer(file_system.read('interactivePanels')['66'][1], reply_markup=yes_no)
-    else:
-        await message.answer(file_system.read('interactivePanels')['66'][1], reply_markup=ReplyKeyboardRemove())
-
-    await InteractivePanels.next()
-
-@dp.message_handler(state=InteractivePanels.Q66)
-async def answer_q66(message: types.Message, state: FSMContext):
-    answer = message.text
-    async with state.proxy() as data:
-        data['Q66'] = answer
-
-    if "yes_no" in file_system.read('interactivePanels')['67'][0]:
-        await message.answer(file_system.read('interactivePanels')['67'][1], reply_markup=yes_no)
-    else:
-        await message.answer(file_system.read('interactivePanels')['67'][1], reply_markup=ReplyKeyboardRemove())
-
-    await InteractivePanels.next()
-
-@dp.message_handler(state=InteractivePanels.Q67)
-async def answer_q67(message: types.Message, state: FSMContext):
-    answer = message.text
-    async with state.proxy() as data:
-        data['Q67'] = answer
-
-    if "yes_no" in file_system.read('interactivePanels')['68'][0]:
-        await message.answer(file_system.read('interactivePanels')['68'][1], reply_markup=yes_no)
-    else:
-        await message.answer(file_system.read('interactivePanels')['68'][1], reply_markup=ReplyKeyboardRemove())
-
-    await InteractivePanels.next()
 
 @dp.message_handler(state=InteractivePanels.End)
 async def end_test(message: types.Message, state: FSMContext):
@@ -922,6 +846,6 @@ async def end_test(message: types.Message, state: FSMContext):
     print(data)
 
     await message.answer(f"Экспертиза панели с серийным номером {data['serial']} завершена\n"
-                            "Для проведения другой интерактивной панели выберите команду /test")
+                            "Для проведения экспертизы другой интерактивной панели выберите команду /test",  reply_markup=ReplyKeyboardRemove())
 
     await state.finish()
