@@ -1,12 +1,15 @@
 from aiogram import types
-from aiogram.types import Message, ReplyKeyboardRemove
+from aiogram.types import Message, ReplyKeyboardRemove, InputFile
 from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters import Command
+from loader import bot
 
 from utils import file_system
 from loader import dp
 from states.interactivePanels import InteractivePanels
 from keyboards.keyboards import *
+
+from report import report
 
 from datetime import datetime
 
@@ -849,7 +852,9 @@ async def end_test(message: types.Message, state: FSMContext):
         data['Q62'] = answer
 
     data = await state.get_data()
-    print(data)
+
+    report(data)
+    await bot.send_document(message.from_user.id, InputFile(f"reports/reportPanel-{data['serial']}.pdf"))
 
     await message.answer(f"Экспертиза панели с серийным номером {data['serial']} завершена\n"
                             "Для проведения экспертизы другой интерактивной панели выберите команду /test",  reply_markup=ReplyKeyboardRemove())
