@@ -50,18 +50,33 @@ async def save_photo(message: types.Message, state: FSMContext):
     await InteractivePanels.next()
 
 
+<<<<<<< HEAD
 @dp.message_handler(state=InteractivePanels.Q1)
 async def answer(message: types.Message, state: FSMContext):
+=======
+@dp.message_handler(state=InteractivePanels.all())
+async def answer(message: types.Message):
+    # for question in file_system.read('interactivePanels'):
+    # async with state.proxy() as data:
+    #     data[question] = message.text
+    # # FIXME: https://surik00.gitbooks.io/aiogram-lessons/content/chapter3.html
+    state = dp.current_state(user=message.from_user.id)
+>>>>>>> d1297fd91a3b4bf912c52b04ccc3ec6448d949a2
     for question in file_system.read('interactivePanels'):
-        async with state.proxy() as data:
-            data[file_system.read('interactivePanels')[question]] = message.text
+        await state.set_state(InteractivePanels.all()[int(question)+1])
+        await message.answer(file_system.read('interactivePanels')[str(int(question)+1)][1], reply_markup=yes_no)
 
-        if "yes_no" in file_system.read('interactivePanels')['2'][0]:
-            await message.answer(file_system.read('interactivePanels')['2'][1], reply_markup=yes_no)
-        elif "text" in file_system.read('interactivePanels')['2'][0]:
-            await message.answer(file_system.read('interactivePanels')['2'][1], reply_markup=ReplyKeyboardRemove())
-
-    await InteractivePanels.next()
+    # if "yes_no" in file_system.read('interactivePanels')[str(int(question)+1)][0]:
+    #     # await state.set_state(InteractivePanels.all()[int(question)+1])
+    #     await InteractivePanels.next()
+    #     await message.answer(file_system.read('interactivePanels')[str(int(question)+1)][1], reply_markup=yes_no)
+    #
+    # elif "text" in file_system.read('interactivePanels')[str(int(question)+1)][0]:
+    #     await InteractivePanels.next()
+    #     # await state.set_state(InteractivePanels.all()[int(question)+1])
+    #     await message.answer(file_system.read('interactivePanels')[str(int(question)+1)][1], reply_markup=ReplyKeyboardRemove())
+    #
+    # await InteractivePanels.next()
 
 
 @dp.message_handler(state=InteractivePanels.End)
