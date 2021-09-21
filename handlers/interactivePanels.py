@@ -50,7 +50,7 @@ async def save_photo(message: types.Message, state: FSMContext):
     await InteractivePanels.next()
 
 
-@dp.message_handler(state=InteractivePanels.Question)
+@dp.message_handler(state=InteractivePanels.Q1)
 async def answer(message: types.Message, state: FSMContext):
     for question in file_system.read('interactivePanels'):
         async with state.proxy() as data:
