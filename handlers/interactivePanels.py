@@ -50,28 +50,18 @@ async def save_photo(message: types.Message, state: FSMContext):
     await InteractivePanels.next()
 
 
-@dp.message_handler(state=InteractivePanels.all())
-async def answer(message: types.Message):
-    # for question in file_system.read('interactivePanels'):
-    # async with state.proxy() as data:
-    #     data[question] = message.text
-    # # FIXME: https://surik00.gitbooks.io/aiogram-lessons/content/chapter3.html
-    state = dp.current_state(user=message.from_user.id)
+@dp.message_handler(state=InteractivePanels.Question)
+async def answer(message: types.Message, state: FSMContext):
+    data1 = await state.get_data()
+    print(data1)
     for question in file_system.read('interactivePanels'):
-        await state.set_state(InteractivePanels.all()[int(question)+1])
-        await message.answer(file_system.read('interactivePanels')[str(int(question)+1)][1], reply_markup=yes_no)
+        if question not in data1:
+            await InteractivePanels.Question.set()
+            await message.answer(file_system.read('interactivePanels')[str(int(question)+1)][1], reply_markup=yes_no)
+            async with state.proxy() as data:
+                data[question] = message.text
+                break
 
-    # if "yes_no" in file_system.read('interactivePanels')[str(int(question)+1)][0]:
-    #     # await state.set_state(InteractivePanels.all()[int(question)+1])
-    #     await InteractivePanels.next()
-    #     await message.answer(file_system.read('interactivePanels')[str(int(question)+1)][1], reply_markup=yes_no)
-    #
-    # elif "text" in file_system.read('interactivePanels')[str(int(question)+1)][0]:
-    #     await InteractivePanels.next()
-    #     # await state.set_state(InteractivePanels.all()[int(question)+1])
-    #     await message.answer(file_system.read('interactivePanels')[str(int(question)+1)][1], reply_markup=ReplyKeyboardRemove())
-    #
-    # await InteractivePanels.next()
 
 
 @dp.message_handler(state=InteractivePanels.End)
