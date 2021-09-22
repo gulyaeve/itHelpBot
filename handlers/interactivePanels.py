@@ -71,7 +71,9 @@ async def answer(message: types.Message, state: FSMContext):
                 data = await state.get_data()
                 await message.answer(f"Экспертиза панели с серийным номером {data['serial']} завершена\n"
                                         "Для проведения экспертизы другой интерактивной панели выберите команду /test",  reply_markup=ReplyKeyboardRemove())
-                report(data)
-                await bot.send_document(message.from_user.id, InputFile(f"reports/reportPanel-{data['serial']}.pdf"))
-
+                try:
+                    report(data)
+                    await bot.send_document(message.from_user.id, InputFile(f"reports/reportPanel-{data['serial']}.pdf"))
+                except Exception as e:
+                    await message.answer("Произошла ошибка при формировании отчета.",  reply_markup=ReplyKeyboardRemove()) 
                 await state.finish()
