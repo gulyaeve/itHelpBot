@@ -50,37 +50,28 @@ async def save_photo(message: types.Message, state: FSMContext):
     await InteractivePanels.next()
 
 
-<<<<<<< HEAD
+# УНИВЕРСАЛЬНЫЙ ХЭНДЛЕР
 @dp.message_handler(state=InteractivePanels.Question)
 async def answer(message: types.Message, state: FSMContext):
-    data1 = await state.get_data()
-    print(data1)
-=======
-@dp.message_handler(state=InteractivePanels.Q1)
-async def answer(message: types.Message, state: FSMContext):
->>>>>>> 0b42ec4a7a69d0eb7fb8e66be8fd758b2410124e
-    for question in file_system.read('interactivePanels'):
-        if question not in data1:
-            await InteractivePanels.Question.set()
-            await message.answer(file_system.read('interactivePanels')[str(int(question)+1)][1], reply_markup=yes_no)
-            async with state.proxy() as data:
-                data[question] = message.text
-                break
-
-
-
-@dp.message_handler(state=InteractivePanels.End)
-async def end_test(message: types.Message, state: FSMContext):
-    answer = message.text
-    async with state.proxy() as data:
-        data['Q62'] = answer
-
     data = await state.get_data()
+    for question in file_system.read('interactivePanels'):
+        if f"Q{str(question)}" not in data:
+            await InteractivePanels.Question.set()
+            if str(int(question)+1) in file_system.read('interactivePanels'):
+                if "yes_no" in file_system.read('interactivePanels')[str(int(question)+1)][0]:
+                    await message.answer(file_system.read('interactivePanels')[str(int(question)+1)][1], reply_markup=yes_no)
+                elif "text" in file_system.read('interactivePanels')[str(int(question)+1)][0]:
+                    await message.answer(file_system.read('interactivePanels')[str(int(question)+1)][1], reply_markup=ReplyKeyboardRemove())
+                async with state.proxy() as data:
+                    data[f"Q{str(question)}"] = message.text
+                    break
+            else:
+                async with state.proxy() as data:
+                    data[f"Q{str(question)}"] = message.text
+                data = await state.get_data()
+                await message.answer(f"Экспертиза панели с серийным номером {data['serial']} завершена\n"
+                                        "Для проведения экспертизы другой интерактивной панели выберите команду /test",  reply_markup=ReplyKeyboardRemove())
+                report(data)
+                await bot.send_document(message.from_user.id, InputFile(f"reports/reportPanel-{data['serial']}.pdf"))
 
-    report(data)
-    await bot.send_document(message.from_user.id, InputFile(f"reports/reportPanel-{data['serial']}.pdf"))
-
-    await message.answer(f"Экспертиза панели с серийным номером {data['serial']} завершена\n"
-                            "Для проведения экспертизы другой интерактивной панели выберите команду /test",  reply_markup=ReplyKeyboardRemove())
-
-    await state.finish()
+                await state.finish()

@@ -5,4 +5,3 @@ class InteractivePanels(StatesGroup):
     Serial = State()
     Photo = State()
     Question = State()
-    End = State()
