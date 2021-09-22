@@ -50,10 +50,15 @@ async def save_photo(message: types.Message, state: FSMContext):
     await InteractivePanels.next()
 
 
+<<<<<<< HEAD
 @dp.message_handler(state=InteractivePanels.Question)
 async def answer(message: types.Message, state: FSMContext):
     data1 = await state.get_data()
     print(data1)
+=======
+@dp.message_handler(state=InteractivePanels.Q1)
+async def answer(message: types.Message, state: FSMContext):
+>>>>>>> 0b42ec4a7a69d0eb7fb8e66be8fd758b2410124e
     for question in file_system.read('interactivePanels'):
         if question not in data1:
             await InteractivePanels.Question.set()
