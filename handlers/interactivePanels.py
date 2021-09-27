@@ -15,7 +15,7 @@ from datetime import datetime
 
 class InteractivePanels(StatesGroup):
     Serial = State()
-    Photo = State()
+    # Photo = State()
     Question = State()
 
 @dp.message_handler(commands=['test'])
@@ -35,43 +35,37 @@ async def enter_serial(message: types.Message, state: FSMContext):
         data["type"] = type
         data["serial"] = answer
 
-    await message.answer("Сделайте фотографию внешнего вида интерактивной панели и отправьте её сюда:")
-
-    await InteractivePanels.next()
-
-
-@dp.message_handler(state=InteractivePanels.Photo, content_types=['photo'])
-async def save_photo(message: types.Message, state: FSMContext):
-    async with state.proxy() as data:
-        data["photo"] = f'{data["serial"]}.jpg'
-    await message.photo[-1].download(f'photos/{data["serial"]}.jpg')
-
-    if "yes_no" in file_system.read('interactivePanels')['1'][0]:
-        await message.answer(file_system.read('interactivePanels')['1'][1], reply_markup=yes_no)
-    else:
-        await message.answer(file_system.read('interactivePanels')['1'][1], reply_markup=ReplyKeyboardRemove())
-
+    await message.answer(file_system.read('interactivePanels')["0"][1])
     await InteractivePanels.next()
 
 
 # УНИВЕРСАЛЬНЫЙ ХЭНДЛЕР
-@dp.message_handler(state=InteractivePanels.Question)
+@dp.message_handler(state=InteractivePanels.Question, content_types=['photo', 'text'])
 async def answer(message: types.Message, state: FSMContext):
+    async def saveData(value, question):
+        async with state.proxy() as data:
+            data[f"Q{str(question)}"] = value
+            # print(data)
+
     data = await state.get_data()
     for question in file_system.read('interactivePanels'):
         if f"Q{str(question)}" not in data:
             await InteractivePanels.Question.set()
+            if "photo" in file_system.read('interactivePanels')[str(int(question))][0]:
+                await message.photo[-1].download(f'photos/{data["serial"]}.jpg')
+                await saveData(f'{data["serial"]}.jpg', question)
+            else:
+                await saveData(message.text, question)
             if str(int(question)+1) in file_system.read('interactivePanels'):
                 if "yes_no" in file_system.read('interactivePanels')[str(int(question)+1)][0]:
                     await message.answer(file_system.read('interactivePanels')[str(int(question)+1)][1], reply_markup=yes_no)
-                elif "text" in file_system.read('interactivePanels')[str(int(question)+1)][0]:
+                elif "text" or "photo" in file_system.read('interactivePanels')[str(int(question)+1)][0]:
                     await message.answer(file_system.read('interactivePanels')[str(int(question)+1)][1], reply_markup=ReplyKeyboardRemove())
-                async with state.proxy() as data:
-                    data[f"Q{str(question)}"] = message.text
-                    break
+                # elif "photo" in file_system.read('interactivePanels')[str(int(question)+1)][0]:
+                #     await message.answer(file_system.read('interactivePanels')[str(int(question)+1)][1], reply_markup=ReplyKeyboardRemove())
+                break
             else:
-                async with state.proxy() as data:
-                    data[f"Q{str(question)}"] = message.text
+                await saveData(message.text, question)
                 data = await state.get_data()
                 await message.answer(f"Экспертиза панели с серийным номером {data['serial']} завершена\n"
                                         "Для проведения экспертизы другой интерактивной панели выберите команду /test",  reply_markup=ReplyKeyboardRemove())
