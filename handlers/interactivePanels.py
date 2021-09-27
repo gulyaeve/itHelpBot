@@ -21,6 +21,7 @@ class InteractivePanels(StatesGroup):
 @dp.message_handler(commands=['test'])
 async def enter_test(message: types.Message):
     await message.answer("Вы начали экспертизу интерактивной панели.\n"
+                         "Для отмены экспертизы: /cancel.\n"
                          "Введите серийный номер устройства:")
     await InteractivePanels.Serial.set()
 
@@ -40,7 +41,7 @@ async def enter_serial(message: types.Message, state: FSMContext):
 
 
 # УНИВЕРСАЛЬНЫЙ ХЭНДЛЕР
-@dp.message_handler(state=InteractivePanels.Question, content_types=['photo', 'text'])
+@dp.message_handler(state=InteractivePanels.Question, content_types=types.ContentTypes.ANY)
 async def answer(message: types.Message, state: FSMContext):
     async def saveData(value, question):
         async with state.proxy() as data:
@@ -51,9 +52,15 @@ async def answer(message: types.Message, state: FSMContext):
     for question in file_system.read('interactivePanels'):
         if f"Q{str(question)}" not in data:
             await InteractivePanels.Question.set()
+            if "yes_no" in file_system.read('interactivePanels')[str(int(question))][0]:
+                if message.text not in ["Да", "Нет"]:
+                    return await message.answer("Неверный формат ответа")
             if "photo" in file_system.read('interactivePanels')[str(int(question))][0]:
-                await message.photo[-1].download(f'photos/{data["serial"]}.jpg')
-                await saveData(f'{data["serial"]}.jpg', question)
+                try:
+                    await message.photo[-1].download(f'photos/{data["serial"]}.jpg')
+                    await saveData(f'{data["serial"]}.jpg', question)
+                except:
+                    return await message.answer("Неверный формат ответа")
             else:
                 await saveData(message.text, question)
             if str(int(question)+1) in file_system.read('interactivePanels'):
