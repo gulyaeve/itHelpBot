@@ -4,7 +4,6 @@ from aiogram.dispatcher.filters import Command
 
 from utils import file_system
 from loader import dp
-from states.interactivePanels import InteractivePanels
 
 
 @dp.message_handler(commands=['start'])

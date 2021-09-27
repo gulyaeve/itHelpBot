@@ -1,18 +1,22 @@
 from aiogram import types
 from aiogram.types import Message, ReplyKeyboardRemove, InputFile
 from aiogram.dispatcher import FSMContext
+from aiogram.dispatcher.filters.state import StatesGroup, State
 from aiogram.dispatcher.filters import Command
 from loader import bot
 
 from utils import file_system
 from loader import dp
-from states.interactivePanels import InteractivePanels
 from keyboards.keyboards import *
 
 from report import report
 
 from datetime import datetime
 
+class InteractivePanels(StatesGroup):
+    Serial = State()
+    Photo = State()
+    Question = State()
 
 @dp.message_handler(commands=['test'])
 async def enter_test(message: types.Message):
