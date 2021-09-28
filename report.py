@@ -1,11 +1,11 @@
 # импортируем библиотеки для проекта
 from fpdf import FPDF
 def report(report_measuring):
-   # формируем словарь вопросов для приемки оборудования, референсных значений и промежуточных заголовков отчета
+   # формируем словарь вопросов для приемки оборудования, референсных значений и промежуточных заголовков отчета 
   report_headers={'date': ['Дата приемки оборудования','',''],
               'type': ['Наименование оборудования','',''],
               'serial': ['Серийный номер оборудования','',''],
-              'photo': ['Наличие фото оборудования','',''],
+              'Q0': ['Наличие фото оборудования','',''],
               'Q1': ['Интерактивная панель со встроенным вычислительным блоком','Да','Да','В Н Е Ш Н И Й   В И Д'],
               'Q2': ['Наличие слота на корпусе для установки дополнительного вычислительного блока, который содержит контакты электропитания системного блока от встроенного блока питания моноблока, контакты для подключения цифрового видеосигнала','Да','Да'],
               'Q3': ['Наличие встроенной акустической системы','Да','Да'],
@@ -70,7 +70,7 @@ def report(report_measuring):
               'Q62': ['API должно предоставляет следующий функционал взаимодействия со сторонними приложениями: в части централизованного обновления - скачивания и установки обновлений при поступлении внешней управляющей команды, с подтверждением ее исполнения, в следующих режимах: стандартный (установка выполняется при участии пользователя, сведения о состоянии установки выводятся), автоматический режим (установка выполняется автоматически, без участия пользователя, сведения о состоянии установки выводятся), тихий режим (выполняется без участия пользователя, без вывода сведений о состоянии установки), отложенный режим (позволяет пользователю отложить установку обновления до окончания сеанса работы)','Да','Да']}
 
   # формируем массив ключей
-  keys=['date', 'type','serial','photo', 'Q1', 'Q2','Q3', 'Q4', 'Q5','Q6','Q7','Q8',
+  keys=['date', 'type','serial','Q0', 'Q1', 'Q2','Q3', 'Q4', 'Q5','Q6','Q7','Q8',
                   'Q9', 'Q10', 'Q11', 'Q12', 'Q13','Q14', 'Q15', 'Q16', 'Q17', 'Q18',
                   'Q19', 'Q20', 'Q21', 'Q22', 'Q23','Q24', 'Q25', 'Q26', 'Q27', 'Q28',
                   'Q29', 'Q30', 'Q31', 'Q32', 'Q33','Q34', 'Q35', 'Q36', 'Q37', 'Q38',
@@ -84,7 +84,7 @@ def report(report_measuring):
              'Q57', 'Q58','Q59', 'Q60', 'Q61','Q62']
   keys_number=['Q4','Q6','Q7','Q8','Q9', 'Q10', 'Q11', 'Q12', 'Q13','Q14','Q15', 'Q16',
                'Q17', 'Q18', 'Q19', 'Q20', 'Q22', 'Q23','Q25', 'Q34','Q37']
-
+  
   # создаем объект формата pdf
   pdf = FPDF()
 
@@ -115,42 +115,44 @@ def report(report_measuring):
       header_text=report_headers[key][3]
       pdf.set_font('DejaVuB', size=11)
       pdf.cell(delta_column1+delta_column2*2, 8.5, txt=header_text,border=0, ln=1,align='C')
-
-    # формируем текст для заполнения
+ 
+    # формируем текст для заполнения 
     text=[report_headers[key][0],report_headers[key][1],report_measuring[key],report_headers[key][2]]
-    pdf.set_font("DejaVu", size=8)
-
+    pdf.set_font("DejaVu", size=8) 
+  
     # определяем начальные координаты курсора документа
     x0=pdf.x
     y0=pdf.y
 
     # заполняем первые столбец
-    if key in ['date', 'type','serial','photo']:
+    if key in ['date', 'type','serial','Q0']:
       pdf.cell(delta_column2,4,txt='',border=0,ln=0,align='L')
       pdf.cell(delta_column2,5,txt=str(text[1]),ln=0,border=0,align='L')
 
-    pdf.multi_cell(delta_column1, 4, txt=text[0],border=0, align='L')
-
+    pdf.multi_cell(delta_column1, 3.5, txt=text[0],border=0, align='L')
+  
     # запонимаем координату курсора в конце столбца
     y1=pdf.y
-
+  
     # задаем координаты перехода курсора в начало следующего столбца
     pdf.y=y0
     pdf.x=x0+delta_column1
-
+  
     # заполняем второй столбец
-    pdf.cell(delta_column2,4,txt=str(text[1]),border=0,align='C')
+    pdf.cell(delta_column2,3.5,txt=str(text[1]),border=0,align='C')
     pdf.y=y0
     pdf.x=x0+delta_column1+delta_column2
-
-    # заполняем третий столбец и выделяем отклонения
+  
+    # заполняем третий столбец и выделяем отклонения   
     if (key in keys_text and text[2]!=text[3]) or (key in keys_number and float(text[2])<text[3]) or (key=='Q30' and (float(text[2])<text[3][0] or float(text[2])>text[3][1])):
       pdf.set_draw_color(255,0,0)
-      pdf.cell(delta_column2,4,txt=str(text[2]),border=1,align='C')
+      pdf.cell(delta_column2,3.5,txt=str(text[2]),border=1,align='C')
       pdf.ln(y1-y0+0.5)
     else:
       pdf.set_draw_color(255,255,255)
-      pdf.cell(delta_column2,4,txt=str(text[2]),border=0,align='C')
-      pdf.ln(y1-y0+0.5) 
+      pdf.cell(delta_column2,3.5,txt=str(text[2]),border=0,align='C')
+      pdf.ln(y1-y0+0.5)    
+  
+   
 
   pdf.output(f"reports/reportPanel-{report_measuring['serial']}.pdf")
