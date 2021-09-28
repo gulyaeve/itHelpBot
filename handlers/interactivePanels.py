@@ -43,7 +43,11 @@ async def enter_serial(message: types.Message, state: FSMContext):
 # УНИВЕРСАЛЬНЫЙ ХЭНДЛЕР
 @dp.message_handler(state=InteractivePanels.Question, content_types=types.ContentTypes.ANY)
 async def answer(message: types.Message, state: FSMContext):
+
     async def saveData(value, question):
+        """
+        Сохранение данных в словарь Data
+        """
         async with state.proxy() as data:
             data[f"Q{str(question)}"] = value
             # print(data)
@@ -52,6 +56,11 @@ async def answer(message: types.Message, state: FSMContext):
     for question in file_system.read('interactivePanels'):
         if f"Q{str(question)}" not in data:
             await InteractivePanels.Question.set()
+
+            # Проверка данных на корректность
+            if "text" in file_system.read('interactivePanels')[str(int(question))][0]:
+                if message.text == None:
+                    return await message.answer("Неверный формат ответа")
             if "yes_no" in file_system.read('interactivePanels')[str(int(question))][0]:
                 if message.text not in ["Да", "Нет"]:
                     return await message.answer("Неверный формат ответа")
@@ -63,7 +72,10 @@ async def answer(message: types.Message, state: FSMContext):
                     return await message.answer("Неверный формат ответа")
             else:
                 await saveData(message.text, question)
+
+            # Следующие вопросы
             if str(int(question)+1) in file_system.read('interactivePanels'):
+                # Отправка следующего вопроса
                 if "yes_no" in file_system.read('interactivePanels')[str(int(question)+1)][0]:
                     await message.answer(file_system.read('interactivePanels')[str(int(question)+1)][1], reply_markup=yes_no)
                 elif "text" or "photo" in file_system.read('interactivePanels')[str(int(question)+1)][0]:
@@ -72,6 +84,7 @@ async def answer(message: types.Message, state: FSMContext):
                 #     await message.answer(file_system.read('interactivePanels')[str(int(question)+1)][1], reply_markup=ReplyKeyboardRemove())
                 break
             else:
+                # Завершение
                 await saveData(message.text, question)
                 data = await state.get_data()
                 await message.answer(f"Экспертиза панели с серийным номером {data['serial']} завершена\n"
