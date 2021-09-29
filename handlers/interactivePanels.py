@@ -15,7 +15,6 @@ from datetime import datetime
 
 class InteractivePanels(StatesGroup):
     Serial = State()
-    # Photo = State()
     Question = State()
 
 @dp.message_handler(commands=['test'])
@@ -28,6 +27,7 @@ async def enter_test(message: types.Message):
 
 @dp.message_handler(state=InteractivePanels.Serial)
 async def enter_serial(message: types.Message, state: FSMContext):
+    # TODO: Сделать проверку наличия серийного номера в базе данных
     answer = message.text
     date = datetime.now().strftime("%d.%m.%Y, %H:%M:%S")
     type = "Интерактивная панель"
@@ -90,6 +90,7 @@ async def answer(message: types.Message, state: FSMContext):
                 await message.answer(f"Экспертиза панели с серийным номером {data['serial']} завершена\n"
                                         "Для проведения экспертизы другой интерактивной панели выберите команду /test",  reply_markup=ReplyKeyboardRemove())
                 try:
+                    # TODO: Сделать сохранение в базу данных
                     report(data)
                     await bot.send_document(message.from_user.id, InputFile(f"reports/reportPanel-{data['serial']}.pdf"))
                 except Exception as e:
