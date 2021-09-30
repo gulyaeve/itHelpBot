@@ -56,15 +56,20 @@ async def answer(message: types.Message, state: FSMContext):
     for question in file_system.read('interactivePanels'):
         if f"Q{str(question)}" not in data:
             await InteractivePanels.Question.set()
-
             # Проверка данных на корректность
-            if "text" in file_system.read('interactivePanels')[str(int(question))][0]:
+            answertype = file_system.read('interactivePanels')[str(int(question))][0]
+            if "text" in answertype:
                 if message.text == None:
                     return await message.answer("Неверный формат ответа")
-            if "yes_no" in file_system.read('interactivePanels')[str(int(question))][0]:
+            if "digit" in answertype:
+                if message.text == None:
+                    return await message.answer("Неверный формат ответа")
+                if not message.text.isdigit():
+                    return await message.answer("Пожалуйста введите ответ в числовом формате:")
+            if "yes_no" in answertype:
                 if message.text not in ["Да", "Нет"]:
                     return await message.answer("Неверный формат ответа")
-            if "photo" in file_system.read('interactivePanels')[str(int(question))][0]:
+            if "photo" in answertype:
                 try:
                     await message.photo[-1].download(f'photos/{data["serial"]}.jpg')
                     await saveData(f'{data["serial"]}.jpg', question)
@@ -78,10 +83,8 @@ async def answer(message: types.Message, state: FSMContext):
                 # Отправка следующего вопроса
                 if "yes_no" in file_system.read('interactivePanels')[str(int(question)+1)][0]:
                     await message.answer(file_system.read('interactivePanels')[str(int(question)+1)][1], reply_markup=yes_no)
-                elif "text" or "photo" in file_system.read('interactivePanels')[str(int(question)+1)][0]:
+                elif "text" or "digit" or "photo" in file_system.read('interactivePanels')[str(int(question)+1)][0]:
                     await message.answer(file_system.read('interactivePanels')[str(int(question)+1)][1], reply_markup=ReplyKeyboardRemove())
-                # elif "photo" in file_system.read('interactivePanels')[str(int(question)+1)][0]:
-                #     await message.answer(file_system.read('interactivePanels')[str(int(question)+1)][1], reply_markup=ReplyKeyboardRemove())
                 break
             else:
                 # Завершение
