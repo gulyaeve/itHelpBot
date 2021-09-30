@@ -64,7 +64,7 @@ async def answer(message: types.Message, state: FSMContext):
             if "digit" in answertype:
                 if message.text == None:
                     return await message.answer("Неверный формат ответа")
-                if not message.text.isdigit():
+                if not message.text.replace('.', '', 1).isdigit():
                     return await message.answer("Пожалуйста введите ответ в числовом формате:")
             if "yes_no" in answertype:
                 if message.text not in ["Да", "Нет"]:
