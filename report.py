@@ -2,7 +2,7 @@
 from fpdf import FPDF
 def report(report_measuring):
    # формируем словарь вопросов для приемки оборудования, референсных значений и промежуточных заголовков отчета 
-  report_headers={'date': ['Дата приемки оборудования','',''],
+  report_headers={'date': ['Дата осмотра оборудования','',''],
               'type': ['Наименование оборудования','',''],
               'serial': ['Серийный номер оборудования','',''],
               'Q0': ['Наличие фото оборудования','',''],
@@ -100,9 +100,9 @@ def report(report_measuring):
 
   # формируем заголовок отчета
   pdf.set_font("DejaVuB",size=12)
-  pdf.cell(190, 5, txt='О Т Ч Е Т',border=0,ln=1, align='C')
+  pdf.cell(190, 5, txt='П Р О Т О К О Л',border=0,ln=1, align='C')
   pdf.set_font("DejaVuB",size=12)
-  pdf.cell(190, 5, txt='приемки оборудования',border=0,ln=1, align='C')
+  pdf.cell(190, 5, txt='осмотра оборудования № ______',border=0,ln=1, align='C')
   pdf.ln(5)
 
   # определяем ширину столбцов отчета
@@ -128,8 +128,10 @@ def report(report_measuring):
     if key in ['date', 'type','serial','Q0']:
       pdf.cell(delta_column2,4,txt='',border=0,ln=0,align='L')
       pdf.cell(delta_column2,5,txt=str(text[1]),ln=0,border=0,align='L')
-
-    pdf.multi_cell(delta_column1, 3.5, txt=text[0],border=0, align='L')
+      pdf.multi_cell(delta_column1, 3.5, txt=text[0], border=0, align='L')
+    else:
+      pdf.cell(7,3.5,txt=str(key)[1:]+'.', border=0, align='L')
+      pdf.multi_cell(delta_column1, 3.5, txt=text[0],border=0, align='L')
   
     # запонимаем координату курсора в конце столбца
     y1=pdf.y
@@ -151,7 +153,14 @@ def report(report_measuring):
     else:
       pdf.set_draw_color(255,255,255)
       pdf.cell(delta_column2,3.5,txt=str(text[2]),border=0,align='C')
-      pdf.ln(y1-y0+0.5)    
+      pdf.ln(y1-y0+0.5)
+  text = "Результат осмотра получен без использования специального оборудования и лабораторных условий."
+  pdf.ln(6)
+  pdf.cell(200,3.5,txt=text,border=0,align='L')
+  pdf.ln(6)
+  data=['Дата','Подпись','ФИО сотрудника']
+  for i in range(3):
+    pdf.cell(65,3.5,txt=data[i],border=0,align='L')
   
    
 
