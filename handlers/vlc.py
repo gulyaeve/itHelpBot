@@ -19,6 +19,11 @@ pattern = r"(?:10.)\d{1,}.\d{1,}.\d{1,}:\d{1,}"
 class Vlc(StatesGroup):
     Serial = State()
 
+@dp.message_handler(commands=['help'])
+async def enter_test(message: types.Message):
+    await message.answer("Инструкция по настройке доступна по ссылке:\n"
+                         "https://connect.temocenter.ru/files/video18-19oct.pdf")
+
 @dp.message_handler(commands=['test'])
 async def enter_test(message: types.Message):
     await message.answer("Вы начали проверку ракурса видеокамеры.\n"
