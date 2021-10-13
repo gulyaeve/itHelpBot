@@ -2,6 +2,7 @@ auth.py
 .DS_Store
 photos/
 reports/
+screens/
 *.pkl
 
 # Byte-compiled / optimized / DLL files
