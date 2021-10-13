@@ -14,7 +14,7 @@ async def cmd_start(message: types.Message):
     # Set state
     # await Form.ip[0].set()
 
-    await message.reply("Добро пожаловать в чат-бот ИТ-решений!")
+    await message.reply("Добро пожаловать в VLChekerBOT! Используйте команду /test для запуска проверки видеокамеры.")
 
 
 # You can use state '*' if you need to handle all states
