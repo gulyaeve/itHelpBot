@@ -14,4 +14,4 @@ async def videoScreen(host, user_id):
             break
 
     captura.release()
-    cv2.destroyAllWindows()
+    # cv2.destroyAllWindows()
