@@ -17,3 +17,28 @@ def videoScreen(host, username, date):
             break
 
     capture.release()
+
+
+def videoCap(host, username, date):
+    filename = host.split(":")[0]
+
+    cap = cv2.VideoCapture(f'http://{host}/')
+    cap.set(3,640)
+    cap.set(4,480)
+
+    fourcc = cv2.VideoWriter_fourcc(*'MP4V')
+    out = cv2.VideoWriter(f"videos/{filename}-{username}-{date}.mp4", fourcc, 5.0, (640,480))
+
+    endTime = datetime.datetime.now() + datetime.timedelta(seconds=5)
+
+    while True:
+        ret, frame = cap.read()
+        if ret:
+            out.write(frame)
+            cv2.imshow('frame', frame)
+            if datetime.datetime.now() >= endTime:
+                break
+
+    cap.release()
+    out.release()
+    cv2.destroyAllWindows()

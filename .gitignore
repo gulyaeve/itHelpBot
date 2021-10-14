@@ -3,6 +3,7 @@ auth.py
 photos/
 reports/
 screens/
+videos/
 *.pkl
 
 # Byte-compiled / optimized / DLL files
