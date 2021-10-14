@@ -1,3 +1,5 @@
+import asyncio
+
 from aiogram import types
 from aiogram.types import Message, ReplyKeyboardRemove, InputFile
 from aiogram.dispatcher import FSMContext
@@ -6,6 +8,7 @@ from aiogram.dispatcher.filters import Command
 from loader import bot
 
 import re
+import threading
 from utils import file_system
 from loader import dp
 from keyboards.keyboards import *
@@ -34,11 +37,17 @@ async def enter_test(message: types.Message):
 
 @dp.message_handler(state=Vlc.Serial)
 async def enter_serial(message: types.Message, state: FSMContext):
-    if re.findall(pattern, message.text):
+    if re.match(pattern, message.text):
+        datenow = datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
+        x = threading.Thread(target=videoScreen, args=(message.text, message.from_user.username, datenow))
+        x.start()
         await message.answer("В течение минуты вы получите скриншот с камеры.")
         try:
-            videoScreen(message.text, message.from_user.username)
-            await bot.send_photo(message.from_user.id, InputFile(f"screens/{message.text.split(':')[0]}-{message.from_user.username}.png"))
+            await asyncio.sleep(15)
+            await bot.send_photo(message.from_user.id,
+                                 InputFile(f"screens/{message.text.split(':')[0]}-{message.from_user.username}-{datenow}.png"))
+            # if videoScreen(message.text, message.from_user.username):
+            #     await bot.send_photo(message.from_user.id, InputFile(f"screens/{message.text.split(':')[0]}-{message.from_user.username}.png"))
         except Exception as e:
             await message.answer("Произошла ошибка соединения.\n"
                                  "1. Проверьте ip-адрес трансляции. Укажите в формате 10.хх.хх.хх:8899\n"
