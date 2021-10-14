@@ -1,7 +1,7 @@
 import cv2, datetime
 
 
-async def videoScreen(host, user_id):
+def videoScreen(host, user_id):
     #TODO: Доделать проверку пинг
     capture = cv2.VideoCapture(f'http://{host}/')
     filename = host.split(":")[0]

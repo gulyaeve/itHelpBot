@@ -37,7 +37,7 @@ async def enter_serial(message: types.Message, state: FSMContext):
     if re.findall(pattern, message.text):
         await message.answer("В течение минуты вы получите скриншот с камеры.")
         try:
-            await videoScreen(message.text, message.from_user.username)
+            videoScreen(message.text, message.from_user.username)
             await bot.send_photo(message.from_user.id, InputFile(f"screens/{message.text.split(':')[0]}-{message.from_user.username}.png"))
         except Exception as e:
             await message.answer("Произошла ошибка соединения.\n"
