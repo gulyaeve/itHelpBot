@@ -1,7 +1,5 @@
 import cv2
 import datetime
-from loader import bot
-from aiogram.types import InputFile
 
 
 def videoScreen(host, username, date):
@@ -19,4 +17,3 @@ def videoScreen(host, username, date):
             break
 
     capture.release()
-    # await bot.send_photo(username, InputFile(f"screens/{filename}-{username}.png"))
