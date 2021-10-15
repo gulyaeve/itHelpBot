@@ -76,9 +76,8 @@ async def send_video(message: types.Message, state: FSMContext):
         await message.answer("В течение минуты вы получите видео с камеры.")
         try:
             await asyncio.sleep(20)
-            await bot.send_video(message.from_user.id,
-                                 InputFile(
-                                     f"videos/{message.text.split(':')[0]}-{message.from_user.username}-{date_now}.mp4"))
+            path_to_file = f"videos/{message.text.split(':')[0]}-{message.from_user.username}-{date_now}.mp4"
+            await bot.send_video(message.from_user.id, InputFile(path_to_file))
         except Exception as e:
             await message.answer("Произошла ошибка соединения.\n"
                                  "1. Проверьте ip-адрес трансляции. Укажите в формате 10.хх.хх.хх:8899\n"
