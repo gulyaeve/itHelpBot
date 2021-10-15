@@ -26,7 +26,7 @@ def videoCap(host, username, date):
     cap.set(3,640)
     cap.set(4,480)
 
-    fourcc = cv2.VideoWriter_fourcc(*'X264')
+    fourcc = cv2.VideoWriter_fourcc(*'avc1')
     out = cv2.VideoWriter(f"videos/{filename}-{username}-{date}.mp4", fourcc, 5.0, (640,480))
 
     endTime = datetime.datetime.now() + datetime.timedelta(seconds=5)
