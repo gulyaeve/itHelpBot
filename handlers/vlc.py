@@ -43,7 +43,7 @@ async def enter_serial(message: types.Message, state: FSMContext):
         x.start()
         await message.answer("В течение минуты вы получите скриншот с камеры.")
         try:
-            await asyncio.sleep(15)
+            await asyncio.sleep(20)
             await bot.send_photo(message.from_user.id,
                                  InputFile(
                                      f"screens/{message.text.split(':')[0]}-{user}-{date_now}.png"))
