@@ -1,8 +1,7 @@
 auth.py
 .DS_Store
-photos/
-reports/
 screens/
+reports/
 videos/
 *.pkl
 
