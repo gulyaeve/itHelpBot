@@ -5,7 +5,6 @@ import datetime
 def videoScreen(host, username, date):
     capture = cv2.VideoCapture(f'http://{host}/')
     filename = host.split(":")[0]
-
     endTime = datetime.datetime.now() + datetime.timedelta(seconds=1)
     while True:
         ret, frame = capture.read()
