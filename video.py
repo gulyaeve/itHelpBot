@@ -10,7 +10,23 @@ def videoScreen(host, username, date):
         ret, frame = capture.read()
         if ret:
             if datetime.datetime.now() >= endTime:
-                cv2.imwrite(f"screens/{filename}-{username}-{date}.png", frame)
+                cv2.imwrite(f"screens/VLC-{filename}-{username}-{date}.png", frame)
+                break
+        else:
+            break
+
+    capture.release()
+
+
+def videoScreen2(host, username, date):
+    capture = cv2.VideoCapture(f'rtsp://admin:admin123@{host}:554/')
+    filename = host
+    endTime = datetime.datetime.now() + datetime.timedelta(seconds=3)
+    while True:
+        ret, frame = capture.read()
+        if ret:
+            if datetime.datetime.now() >= endTime:
+                cv2.imwrite(f"screens/ЕЦХД-{filename}-{username}-{date}.png", frame)
                 break
         else:
             break

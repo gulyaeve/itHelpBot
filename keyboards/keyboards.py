@@ -9,3 +9,13 @@ yes_no = ReplyKeyboardMarkup(
     ],
     resize_keyboard=True
     )
+
+vlc_echd = ReplyKeyboardMarkup(
+    keyboard=[
+        [
+            KeyboardButton(text="VLC"),
+            KeyboardButton(text="ЕЦХД")
+        ],
+    ],
+    resize_keyboard=True
+    )
