@@ -89,7 +89,7 @@ async def send_video(message: types.Message, state: FSMContext):
             await asyncio.sleep(20)
             await bot.send_photo(message.from_user.id,
                                  InputFile(
-                                     f"screens/ЕЦХД-{message.text}-{user}-{date_now}.png"))
+                                     f"screens/ECHD-{message.text}-{user}-{date_now}.png"))
         except Exception as e:
             await message.answer("Произошла ошибка соединения.\n"
                                  "Проверьте ip-адрес трансляции. Укажите в формате 10.хх.хх.хх\n"
