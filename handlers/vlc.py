@@ -1,6 +1,7 @@
 import asyncio
 import re
 import threading
+from utils import file_system
 from datetime import datetime
 
 from aiogram import types
@@ -31,6 +32,8 @@ async def enter_test(message: types.Message):
 
 @dp.message_handler(commands=['test'])
 async def cam_option(message: types.Message):
+    # date_now = datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
+    # file_system.camera_add(message.from_user.id, date_now)
     await message.answer("Вы начали проверку ракурса видеокамеры.\n"
                          "Для отмены: /cancel.\n"
                          "Выберите технологию, по которой работает данная камера:",
@@ -41,9 +44,11 @@ async def cam_option(message: types.Message):
 @dp.message_handler(state=Vlc.Technology)
 async def enter_technology(message: types.Message):
     if message.text == "VLC":
+        # file_system.update_camera(message.from_user.id, "type", "VLC")
         await message.answer("Введите ip-адрес и порт устройства в формате: 10.x.x.x:8899", reply_markup=ReplyKeyboardRemove())
         await Vlc.Hostname.set()
     elif message.text == "ЕЦХД":
+        # file_system.update_camera(message.from_user.id, "type", "ECHD")
         await message.answer("Введите ip-адрес устройства в формате: 10.x.x.x", reply_markup=ReplyKeyboardRemove())
         await Vlc.HostnameECHD.set()
     else:
@@ -64,12 +69,14 @@ async def enter_serial(message: types.Message, state: FSMContext):
             await bot.send_photo(message.from_user.id,
                                  InputFile(
                                      f"screens/VLC-{message.text.split(':')[0]}-{user}-{date_now}.png"))
+            file_system.camera_add(f"VLC,{message.text.split(':')[0]},{user},{date_now},success")
         except Exception as e:
             await message.answer("Произошла ошибка соединения.\n"
                                  "1. Проверьте ip-адрес трансляции. Укажите в формате 10.хх.хх.хх:8899\n"
                                  "2. Обновите VLC (в некоторых случаях при переустановке программа предлагает "
                                  "установить дополнительные разрешения на трансляцию) videolan.org/vlc/\n\n "
                                  "Если ошибка повторяется напишите организаторам. it-help@edu.mos.ru\n\n")
+            file_system.camera_add(f"VLC,{message.text.split(':')[0]},{user},{date_now},failed")
     else:
         return await message.answer(
             "Неверный формат ввода. Введите ip-адрес и порт устройства в формате: 10.x.x.x:8899")
@@ -90,10 +97,12 @@ async def send_video(message: types.Message, state: FSMContext):
             await bot.send_photo(message.from_user.id,
                                  InputFile(
                                      f"screens/ECHD-{message.text}-{user}-{date_now}.png"))
+            file_system.camera_add(f"ECHD,{message.text.split(':')[0]},{user},{date_now},success")
         except Exception as e:
             await message.answer("Произошла ошибка соединения.\n"
                                  "Проверьте ip-адрес трансляции. Укажите в формате 10.хх.хх.хх\n"
                                  "Если ошибка повторяется напишите организаторам. it-help@edu.mos.ru\n\n")
+            file_system.camera_add(f"VLC,{message.text.split(':')[0]},{user},{date_now},failed")
     else:
         return await message.answer(
             "Неверный формат ввода. Введите ip-адрес устройства в формате: 10.x.x.x")

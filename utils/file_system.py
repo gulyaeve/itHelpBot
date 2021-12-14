@@ -1,7 +1,6 @@
 from json import loads, dumps
 
 
-
 def read(filename):
     try:
 
@@ -35,6 +34,19 @@ def add_junk(value):
 
     except FileNotFoundError:
         log('log', '[error] Ошибка, файл не найден')
+
+
+def camera_add(message):
+    try:
+        with open('log.txt', 'a', encoding='utf-8') as file:
+            file.write(message + '\n')
+
+    except FileNotFoundError:
+        print('Файл не найден (код 1)')
+        return None
+
+    else:
+        return 0
 
 
 def new_user(user_id):
