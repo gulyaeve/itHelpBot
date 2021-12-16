@@ -102,7 +102,7 @@ async def send_video(message: types.Message, state: FSMContext):
             await message.answer("Произошла ошибка соединения.\n"
                                  "Проверьте ip-адрес трансляции. Укажите в формате 10.хх.хх.хх\n"
                                  "Если ошибка повторяется напишите организаторам. it-help@edu.mos.ru\n\n")
-            file_system.camera_add(f"VLC,{message.text.split(':')[0]},{user},{date_now},failed")
+            file_system.camera_add(f"ECHD,{message.text.split(':')[0]},{user},{date_now},failed")
     else:
         return await message.answer(
             "Неверный формат ввода. Введите ip-адрес устройства в формате: 10.x.x.x")
