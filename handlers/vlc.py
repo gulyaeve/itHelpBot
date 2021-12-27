@@ -32,8 +32,6 @@ async def enter_test(message: types.Message):
 
 @dp.message_handler(commands=['test'])
 async def cam_option(message: types.Message):
-    # date_now = datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
-    # file_system.camera_add(message.from_user.id, date_now)
     await message.answer("Вы начали проверку ракурса видеокамеры.\n"
                          "Для отмены: /cancel.\n"
                          "Выберите технологию, по которой работает данная камера:",
@@ -44,11 +42,9 @@ async def cam_option(message: types.Message):
 @dp.message_handler(state=Vlc.Technology)
 async def enter_technology(message: types.Message):
     if message.text == "VLC":
-        # file_system.update_camera(message.from_user.id, "type", "VLC")
         await message.answer("Введите ip-адрес и порт устройства в формате: 10.x.x.x:8899", reply_markup=ReplyKeyboardRemove())
         await Vlc.Hostname.set()
     elif message.text == "ЕЦХД":
-        # file_system.update_camera(message.from_user.id, "type", "ECHD")
         await message.answer("Введите ip-адрес устройства в формате: 10.x.x.x", reply_markup=ReplyKeyboardRemove())
         await Vlc.HostnameECHD.set()
     else:

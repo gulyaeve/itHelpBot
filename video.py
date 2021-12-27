@@ -1,6 +1,6 @@
 import cv2
 import datetime
-
+from utils import file_system
 
 def videoScreen(host, username, date):
     capture = cv2.VideoCapture(f'http://{host}/')
@@ -19,7 +19,8 @@ def videoScreen(host, username, date):
 
 
 def videoScreen2(host, username, date):
-    capture = cv2.VideoCapture(f'rtsp://admin:admin123@{host}:554/')
+    password = file_system.read('DIA')[host]
+    capture = cv2.VideoCapture(f'rtsp://admin:{password}@{host}:554/')
     filename = host
     endTime = datetime.datetime.now() + datetime.timedelta(seconds=3)
     while True:

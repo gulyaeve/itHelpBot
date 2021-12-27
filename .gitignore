@@ -4,6 +4,7 @@ screens/
 reports/
 videos/
 *.pkl
+log.txt
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
