@@ -5,6 +5,7 @@ reports/
 videos/
 *.pkl
 log.txt
+Dockerfile
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
