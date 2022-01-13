@@ -4,8 +4,7 @@ WORKDIR /home
 
 ENV TELEGRAM_API_TOKEN=""
 
-RUN pip install -U pip aiogram opencv-python && apt-get update
-RUN apt-get install ffmpeg libsm6 libxext6  -y
+RUN pip install -U pip aiogram && apt-get update
 COPY . ./
 
 ENTRYPOINT ["python", "app.py"]
