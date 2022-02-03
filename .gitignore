@@ -1,8 +1,5 @@
 auth.py
 .DS_Store
-screens/
-reports/
-videos/
 *.pkl
 log.txt
 Dockerfile
