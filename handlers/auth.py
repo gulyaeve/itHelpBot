@@ -38,14 +38,15 @@ async def enter_code(message: types.Message, state: FSMContext):
             await state.finish()
         else:
             code = randrange(1, 10 ** 6)
+            log(msg=f"Generate code[{code}]; id4me[{id4me}]; email[{email}]; user_id[{message.from_user.id}]",
+                level=INFO)
             send_email(email, f"Здраствуйте! Ваш код подтверждения: {code}")
             await message.answer("На ваш e-mail отправлен код подтверждения. Введите код подтверждения из письма:")
             async with state.proxy() as data:
                 data["email"] = email
                 data["id4me"] = id4me
                 data["code"] = code
-            log(msg=f"Generate code[{code}]; id4me[{id4me}]; email[{email}]; user_id[{message.from_user.id}]",
-                level=INFO)
+            await file_system.new_user(message.from_user.id)
             await Auth.Code.set()
     else:
         log(msg=f"Wrong email[{email}]; user_id[{message.from_user.id}]", level=INFO)
@@ -58,7 +59,8 @@ async def code_confirm(message: types.Message, state: FSMContext):
     data = await state.get_data()
     if message.text == str(data["code"]):
         log(msg=f"Enter valid code[{message.text}]; user_id[{message.from_user.id}]", level=INFO)
-        # TODO: Сделать сохранение telegram_id в 4me
+        await file_system.update_user(message.from_user.id, "email", data["email"])
+        await file_system.update_user(message.from_user.id, "id4me", data["id4me"])
         await message.answer("Вы успешно авторизовались!")
         await state.finish()
     else:
