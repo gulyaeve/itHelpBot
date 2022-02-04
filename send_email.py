@@ -1,4 +1,5 @@
 import smtplib
+import logging
 from email.mime.text import MIMEText
 from config import sender_email, email_password
 
@@ -11,6 +12,6 @@ def send_email(recipient, message):
         msg = MIMEText(message)
         msg["Subject"] = "itHelpBot Authorization"
         server.sendmail(sender_email, recipient, msg.as_string())
-        print("The message was sent successfully!")
+        logging.log(msg=f"Success email[{recipient}]: {message}", level=logging.INFO)
     except Exception as _ex:
-        print(f"{_ex}\nCheck your login or password please!")
+        logging.log(msg=f"{_ex}: Failed to send email[{recipient}]", level=logging.INFO)
