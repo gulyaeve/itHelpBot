@@ -11,7 +11,7 @@ def get_id(email):
         r = requests.get(f'{link}{route}', headers=headers)
         id4me = r.json()[0]["id"]
         log(msg=f"Found id4me[{id4me}]; email[{email}]", level=INFO)
-        return r.json()[0]["id"]
+        return id4me
     except Exception as _ex:
         log(msg=f"{_ex}: Unknown email[{email}]", level=INFO)
         return 0

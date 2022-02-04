@@ -21,10 +21,13 @@ class Auth(StatesGroup):
 
 @dp.message_handler(commands=["auth"])
 async def cmd_auth(message: types.Message):
-    log(msg=f"Start authentication for user_id[{message.from_user.id}], username[{message.from_user.username}]",
-        level=INFO)
-    await message.reply("Введите ваш e-mail, связанный с СУДИР:")
-    await Auth.Email.set()
+    if str(message.from_user.id) not in file_system.read("users"):
+        log(msg=f"Start authentication for user_id[{message.from_user.id}], username[{message.from_user.username}]",
+            level=INFO)
+        await message.reply("Введите ваш e-mail, связанный с СУДИР:")
+        await Auth.Email.set()
+    else:
+        await message.reply("Вы уже авторизованы!")
 
 
 @dp.message_handler(state=Auth.Email)
@@ -46,7 +49,6 @@ async def enter_code(message: types.Message, state: FSMContext):
                 data["email"] = email
                 data["id4me"] = id4me
                 data["code"] = code
-            file_system.new_user(message.from_user.id)
             await Auth.Code.set()
     else:
         log(msg=f"Wrong email[{email}]; user_id[{message.from_user.id}]", level=INFO)
@@ -60,6 +62,7 @@ async def code_confirm(message: types.Message, state: FSMContext):
     data = await state.get_data()
     if message.text == str(data["code"]):
         log(msg=f"Enter valid code[{message.text}]; user_id[{message.from_user.id}]", level=INFO)
+        file_system.new_user(message.from_user.id)
         file_system.update_user(telegram_id, "email", data["email"])
         file_system.update_user(telegram_id, "id4me", data["id4me"])
         log(msg=f"Пользователь сохранён id[{telegram_id}]; email[{data['email']}]; id4me[{data['id4me']}]",
