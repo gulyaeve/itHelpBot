@@ -37,7 +37,7 @@ def add_junk(value):
         log(msg='[error] Ошибка, файл не найден', level=INFO)
 
 
-async def new_user(user_id):
+def new_user(user_id):
     try:
         users = read('users')
         users[user_id] = {
@@ -54,7 +54,7 @@ async def new_user(user_id):
         return 0
 
 
-async def update_user(user_id, field, value):
+def update_user(user_id, field, value):
     try:
         users = read('users')
         users[user_id][field] = value

@@ -46,7 +46,7 @@ async def enter_code(message: types.Message, state: FSMContext):
                 data["email"] = email
                 data["id4me"] = id4me
                 data["code"] = code
-            await file_system.new_user(message.from_user.id)
+            file_system.new_user(message.from_user.id)
             await Auth.Code.set()
     else:
         log(msg=f"Wrong email[{email}]; user_id[{message.from_user.id}]", level=INFO)
@@ -56,11 +56,14 @@ async def enter_code(message: types.Message, state: FSMContext):
 
 @dp.message_handler(state=Auth.Code)
 async def code_confirm(message: types.Message, state: FSMContext):
+    telegram_id = str(message.from_user.id)
     data = await state.get_data()
     if message.text == str(data["code"]):
         log(msg=f"Enter valid code[{message.text}]; user_id[{message.from_user.id}]", level=INFO)
-        await file_system.update_user(message.from_user.id, "email", data["email"])
-        await file_system.update_user(message.from_user.id, "id4me", data["id4me"])
+        file_system.update_user(telegram_id, "email", data["email"])
+        file_system.update_user(telegram_id, "id4me", data["id4me"])
+        log(msg=f"Пользователь сохранён id[{telegram_id}]; email[{data['email']}]; id4me[{data['id4me']}]",
+            level=INFO)
         await message.answer("Вы успешно авторизовались!")
         await state.finish()
     else:
