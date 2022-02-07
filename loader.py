@@ -8,6 +8,6 @@ from config import telegram_token
 bot = Bot(token=telegram_token, parse_mode=types.ParseMode.HTML)
 storage = MemoryStorage()
 dp = Dispatcher(bot, storage=storage)
-logging.basicConfig(format=u'%(filename)s [LINE:%(lineno)d] #%(levelname)-8s [%(asctime)s]  %(message)s',
+logging.basicConfig(format=u'%(filename)s [LINE:%(lineno)d] [%(funcName)s()] #%(levelname)-5s [%(asctime)s]  %(message)s',
                     level=logging.INFO,
                     )

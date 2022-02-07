@@ -10,12 +10,15 @@ yes_no = ReplyKeyboardMarkup(
     resize_keyboard=True
     )
 
-vlc_echd = ReplyKeyboardMarkup(
+request_submit = ReplyKeyboardMarkup(
     keyboard=[
         [
-            KeyboardButton(text="VLC"),
-            KeyboardButton(text="ЕЦХД")
+            KeyboardButton(text="Отправить")
+        ],
+        [
+            KeyboardButton(text="ОТМЕНА")
         ],
     ],
     resize_keyboard=True
     )
+
