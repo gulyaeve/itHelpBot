@@ -1,5 +1,14 @@
 from aiogram import types
 from utils import file_system
+from loader import bot
+
+
+async def set_default_commands(dp):
+    return await bot.set_my_commands([
+        types.BotCommand(command="/start", description="Начать работу с ботом"),
+        types.BotCommand(command="/auth", description="Авторизоваться в 4me"),
+        types.BotCommand(command="/request", description="Отправить заявку")
+    ])
 
 
 def make_dict(r_json, key_name, value_name):

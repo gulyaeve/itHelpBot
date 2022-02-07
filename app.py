@@ -1,5 +1,6 @@
 import loader
-from loader import bot, storage, set_default_commands
+from loader import bot, storage
+from utils.utilities import set_default_commands
 
 
 async def on_shutdown(dp):
