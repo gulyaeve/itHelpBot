@@ -28,7 +28,7 @@ async def start_request(message: types.Message):
         log(INFO, f"Starting create response. userid[{message.from_user.id}]")
         buttons = get_services()
         service_keyboard = utilities.make_keyboard(buttons)
-        await message.reply("Выберите услугу:", reply_markup=service_keyboard)
+        await message.reply("Выберите услугу", reply_markup=service_keyboard)
         await Request.Service.set()
 
 
@@ -44,8 +44,7 @@ async def request_service(message: types.Message, state: FSMContext):
         await message.reply("Выберите компонент услуги:", reply_markup=instances_keyboard)
         await Request.Service_instance.set()
     else:
-        # TODO: Сделать ввод темы обращения
-        return await message.reply("Неверный формат ввода. Введите тему обращения.")
+        return await message.reply("Неверный формат ввода.")
 
 
 @dp.message_handler(state=Request.Service_instance)
