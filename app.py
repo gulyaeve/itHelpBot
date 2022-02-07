@@ -1,4 +1,3 @@
-import loader
 from loader import bot, storage
 from utils.utilities import set_default_commands
 

@@ -1,9 +1,8 @@
 import requests
-import json
 from logging import log, INFO
 
 from config import link, headers
-from utils import file_system, utilities
+from utils import utilities
 
 
 def get_id(email):
@@ -21,25 +20,12 @@ def get_id(email):
 def get_services():
     route = 'services/enabled'
     r = requests.get(f'{link}{route}', headers=headers)
-    # keys = []
-    # values = []
-    # for item in r.json():
-    #     for attribute, value in item.items():
-    #         if attribute == "id":
-    #             keys.append(value)
-    #         if attribute == "name":
-    #             values.append(value)
     return utilities.make_dict(r.json(), "id", "name")
 
 
 def get_service_instance(id_s):
     route = f'service_instances?service={id_s}'
     r = requests.get(f'{link}{route}', headers=headers)
-    # values = []
-    # for item in r.json():
-    #     for attribute, value in item.items():
-    #         if attribute == "name":
-    #             values.append(value)
     return utilities.make_dict(r.json(), "id", "name")
 
 
@@ -47,6 +33,24 @@ def get_subject(id_s):
     route = f'request_templates/enabled?service={id_s}'
     r = requests.get(f'{link}{route}', headers=headers)
     return utilities.make_dict(r.json(), "id", "subject")
+
+
+def send_request(id4me, subject, comment, id_si):
+    post_request = 'requests'
+    post_data = f"""{{
+        "category": "incident",
+        "created_by": "{str(id4me)}",
+        "internal_note": "{comment}",
+        "requested_by": "{str(id4me)}",
+        "subject": "{subject}",
+        "service_instance_id": "{str(id_si)}",
+        "impact": "low"
+        }}"""
+    p = requests.post(f'{link}{post_request}',
+                      headers=headers,
+                      data=str(post_data).encode('Utf-8')
+                      )
+    return p.json()
 
 
 

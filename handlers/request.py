@@ -1,13 +1,11 @@
 from aiogram import types
 from aiogram.dispatcher import FSMContext
-from aiogram.dispatcher.filters import Command
 from aiogram.dispatcher.filters.state import StatesGroup, State
-from aiogram.dispatcher.filters import Text
 from keyboards import keyboards
 
 from utils import file_system, utilities
 from loader import dp
-from backend_4me import get_services, get_service_instance, get_subject
+from backend_4me import get_services, get_service_instance, get_subject, send_request
 from logging import log, INFO
 
 
@@ -85,5 +83,6 @@ async def request_comment(message: types.Message, state: FSMContext):
 async def request_send(message: types.Message, state: FSMContext):
     if message.text == "Отправить":
         data = await state.get_data()
-        print(data)
-        log(INFO, f"user_id[{message.from_user.id}] send request.")
+        req = send_request(data["id4me"], data["subject"], data["comment"], data["id_si"])
+        await message.answer(f"Запрос успешно отправлен! Номер: {req['id']}")
+        log(INFO, f"user_id[{message.from_user.id}] send request [{req['id']}]")
