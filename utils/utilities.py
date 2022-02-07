@@ -1,4 +1,5 @@
 from aiogram import types
+from utils import file_system
 
 
 def make_dict(r_json, key_name, value_name):
@@ -25,3 +26,7 @@ def make_keyboard(buttons: dict):
         keyboard.add(button)
     keyboard.add("ОТМЕНА")
     return keyboard
+
+
+def get_id_from_telegram(user_id):
+    return file_system.read("users")[str(user_id)]["id4me"]

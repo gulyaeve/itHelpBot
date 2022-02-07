@@ -3,6 +3,7 @@ from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters import Command
 from aiogram.dispatcher.filters.state import StatesGroup, State
 from aiogram.dispatcher.filters import Text
+from keyboards import keyboards
 
 from utils import file_system, utilities
 from loader import dp
@@ -36,6 +37,7 @@ async def request_service(message: types.Message, state: FSMContext):
     if message.text in get_services().values():
         log(INFO, f"user_id[{message.from_user.id}] choose [{message.text}]")
         async with state.proxy() as data:
+            data["id4me"] = utilities.get_id_from_telegram(message.from_user.id)
             data["id_s"] = utilities.get_key(get_services(), message.text)
         buttons = get_service_instance(utilities.get_key(get_services(), message.text))
         instances_keyboard = utilities.make_keyboard(buttons)
@@ -73,13 +75,16 @@ async def request_comment(message: types.Message, state: FSMContext):
     log(INFO, f"user_id[{message.from_user.id}] comment: {message.text}")
     async with state.proxy() as data:
         data["comment"] = message.text
-    await message.reply("Проверьте данные вашего запроса перед отправкой:", reply_markup=types.ReplyKeyboardRemove())
+    await message.reply("Проверьте данные вашего запроса перед отправкой:")
+    data = await state.get_data()
+    await message.answer(f"Тема запроса: {data['subject']}\n"
+                         f"Комментарий: {data['comment']}", reply_markup=keyboards.request_submit)
     await Request.Send.set()
 
 
 @dp.message_handler(state=Request.Send)
 async def request_send(message: types.Message, state: FSMContext):
     if message.text == "Отправить":
-        log(INFO, f"user_id[{message.from_user.id}] send request.")
         data = await state.get_data()
         print(data)
+        log(INFO, f"user_id[{message.from_user.id}] send request.")

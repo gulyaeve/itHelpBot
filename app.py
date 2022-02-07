@@ -1,4 +1,5 @@
-from loader import bot, storage
+import loader
+from loader import bot, storage, set_default_commands
 
 
 async def on_shutdown(dp):
@@ -10,4 +11,4 @@ if __name__ == '__main__':
     from aiogram import executor
     from handlers import dp
 
-    executor.start_polling(dp, on_shutdown=on_shutdown)
+    executor.start_polling(dp, on_shutdown=on_shutdown, on_startup=set_default_commands)
