@@ -5,5 +5,6 @@ WORKDIR /home
 COPY requirements.txt requirements.txt
 RUN pip install -r requirements.txt
 COPY . .
+RUN echo "{}" > /json/users.json
 
 ENTRYPOINT ["python", "app.py"]
