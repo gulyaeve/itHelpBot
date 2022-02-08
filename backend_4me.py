@@ -42,6 +42,7 @@ def send_request(id4me, subject, comment, id_si):
         "created_by": "{str(id4me)}",
         "internal_note": "{comment}",
         "requested_by": "{str(id4me)}",
+        "requested_for": "{str(id4me)}",
         "subject": "{subject}",
         "service_instance_id": "{str(id_si)}",
         "impact": "low"

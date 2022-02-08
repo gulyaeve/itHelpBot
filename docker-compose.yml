@@ -1,0 +1,12 @@
+version: '3.7'
+
+services:
+  bot:
+    image: "ithelpbot"
+    environment:
+      TELEGRAM_API_TOKEN: ${TELEGRAM_API_TOKEN}
+      SENDER_EMAIL: ${SENDER_EMAIL}
+      EMAIL_PASSWORD: ${EMAIL_PASSWORD}
+      LINK_4ME: ${LINK_4ME}
+      TOKEN_4ME: ${TOKEN_4ME}
+      ACCOUNT_4ME: ${ACCOUNT_4ME}

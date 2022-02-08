@@ -23,7 +23,7 @@ async def start_request(message: types.Message):
         await message.reply("Вы не авторизованы. Для авторизации выберите команду: /auth")
         log(INFO, f"Non-Auth attempt to create response. userid[{message.from_user.id}]")
     else:
-        log(INFO, f"Starting create response. userid[{message.from_user.id}]")
+        log(INFO, f"userid[{message.from_user.id}] Starting create response")
         buttons = get_services()
         service_keyboard = utilities.make_keyboard(buttons)
         await message.reply("Выберите услугу", reply_markup=service_keyboard)
@@ -83,6 +83,6 @@ async def request_comment(message: types.Message, state: FSMContext):
 async def request_send(message: types.Message, state: FSMContext):
     if message.text == "Отправить":
         data = await state.get_data()
-        req = send_request(data["id4me"], data["subject"], data["comment"], data["id_si"])
-        await message.answer(f"Запрос успешно отправлен! Номер: {req['id']}")
-        log(INFO, f"user_id[{message.from_user.id}] send request [{req['id']}]")
+        send_request(data["id4me"], data["subject"], data["comment"], data["id_si"])
+        await message.answer(f"Запрос успешно отправлен!")
+        log(INFO, f"user_id[{message.from_user.id}] sent request")
