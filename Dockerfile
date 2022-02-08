@@ -5,7 +5,7 @@ WORKDIR /home
 COPY requirements.txt requirements.txt
 RUN pip install -r requirements.txt
 COPY . .
-RUN MKDIR /json
-RUN echo "{}" > /json/users.json
+RUN mkdir ./json
+RUN echo "{}" > ./json/users.json
 
 ENTRYPOINT ["python", "app.py"]
