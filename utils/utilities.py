@@ -11,7 +11,7 @@ async def set_default_commands(dp):
     ])
 
 
-def make_dict(r_json, key_name, value_name):
+async def make_dict(r_json, key_name, value_name):
     keys = []
     values = []
     for item in r_json:

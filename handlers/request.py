@@ -24,7 +24,7 @@ async def start_request(message: types.Message):
         log(INFO, f"Non-Auth attempt to create response. userid[{message.from_user.id}]")
     else:
         log(INFO, f"userid[{message.from_user.id}] Starting create response")
-        buttons = get_services()
+        buttons = await get_services()
         service_keyboard = utilities.make_keyboard(buttons)
         await message.reply("Выберите услугу", reply_markup=service_keyboard)
         await Request.Service.set()
@@ -32,12 +32,13 @@ async def start_request(message: types.Message):
 
 @dp.message_handler(state=Request.Service)
 async def request_service(message: types.Message, state: FSMContext):
-    if message.text in get_services().values():
+    services = await get_services()
+    if message.text in services.values():
         log(INFO, f"user_id[{message.from_user.id}] choose [{message.text}]")
         async with state.proxy() as data:
             data["id4me"] = utilities.get_id_from_telegram(message.from_user.id)
-            data["id_s"] = utilities.get_key(get_services(), message.text)
-        buttons = get_service_instance(utilities.get_key(get_services(), message.text))
+            data["id_s"] = utilities.get_key(services, message.text)
+        buttons = await get_service_instance(utilities.get_key(services, message.text))
         instances_keyboard = utilities.make_keyboard(buttons)
         await message.reply("Выберите компонент услуги:", reply_markup=instances_keyboard)
         await Request.Service_instance.set()
@@ -48,11 +49,12 @@ async def request_service(message: types.Message, state: FSMContext):
 @dp.message_handler(state=Request.Service_instance)
 async def request_service_instance(message: types.Message, state: FSMContext):
     data = await state.get_data()
-    if message.text in get_service_instance(data["id_s"]).values():
+    service_instance = await get_service_instance(data["id_s"])
+    if message.text in service_instance.values():
         log(INFO, f"user_id[{message.from_user.id}] choose [{message.text}]")
         async with state.proxy() as data:
-            data["id_si"] = utilities.get_key(get_service_instance(data["id_s"]), message.text)
-        buttons = get_subject(data["id_s"])
+            data["id_si"] = utilities.get_key(service_instance, message.text)
+        buttons = await get_subject(data["id_s"])
         subject_keyboard = utilities.make_keyboard(buttons)
         await message.reply("Выберите тему:", reply_markup=subject_keyboard)
         await Request.Subject.set()
@@ -83,6 +85,6 @@ async def request_comment(message: types.Message, state: FSMContext):
 async def request_send(message: types.Message, state: FSMContext):
     if message.text == "Отправить":
         data = await state.get_data()
-        send_request(data["id4me"], data["subject"], data["comment"], data["id_si"])
+        answer = await send_request(data["id4me"], data["subject"], data["comment"], data["id_si"])
+        log(INFO, f"Пользователь [{message.from_user.id}] создал запрос [{answer['id']}]")
         await message.answer(f"Запрос успешно отправлен!")
-        log(INFO, f"user_id[{message.from_user.id}] sent request")

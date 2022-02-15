@@ -33,7 +33,7 @@ async def cmd_auth(message: types.Message):
 async def enter_code(message: types.Message, state: FSMContext):
     email = message.text
     if match(email_pattern, message.text):
-        id4me = get_id(email)
+        id4me = await get_id(email)
         if id4me == 0:
             log(msg=f"Invalid email[{email}]; user_id[{message.from_user.id}]", level=INFO)
             await message.answer("Пользователь не найден.")
