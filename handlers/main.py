@@ -28,9 +28,9 @@ async def cancel_handler(message: types.Message, state: FSMContext):
     await message.reply('Действие отменено.', reply_markup=types.ReplyKeyboardRemove())
 
 
-@dp.message_handler(Text)
-async def text_handler(message: types.Message):
-    """
-    Any text handler
-    """
-    log(INFO, f"[{message.from_user.id}] написал: [{message.text}]")
+# @dp.message_handler(Text)
+# async def text_handler(message: types.Message):
+#     """
+#     Any text handler
+#     """
+#     log(INFO, f"[{message.from_user.id}] написал: [{message.text}]")

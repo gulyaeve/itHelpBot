@@ -30,44 +30,29 @@ async def get_json(route):
 async def get_services():
     answer = await get_json('services/enabled')
     return await utilities.make_dict(answer, "id", "name")
-    # async with aiohttp.ClientSession() as session:
-    #     route = 'services/enabled'
-    #     async with session.get(f'{link}{route}', headers=headers, ssl=False) as resp:
-    #         answer = await resp.json()
-    #         return await utilities.make_dict(answer, "id", "name")
 
 
 async def get_service_instance(id_s):
     answer = await get_json(f'service_instances?service={id_s}')
     return await utilities.make_dict(answer, "id", "name")
-    # async with aiohttp.ClientSession() as session:
-    #     route = f'service_instances?service={id_s}'
-    #     async with session.get(f'{link}{route}', headers=headers, ssl=False) as resp:
-    #         answer = await resp.json()
-    #         return await utilities.make_dict(answer, "id", "name")
 
 
 async def get_subject(id_s):
     answer = await get_json(f'request_templates/enabled?service={id_s}')
     return await utilities.make_dict(answer, "id", "subject")
-    # async with aiohttp.ClientSession() as session:
-    #     route = f'request_templates/enabled?service={id_s}'
-    #     async with session.get(f'{link}{route}', headers=headers, ssl=False) as resp:
-    #         answer = await resp.json()
-    #         return await utilities.make_dict(answer, "id", "subject")
 
 
 async def send_request(id4me, subject, comment, id_si):
     async with aiohttp.ClientSession() as session:
         post_request = 'requests'
         post_data = f"""{{
-            "category": "incident",
             "created_by": "{str(id4me)}",
-            "internal_note": "{comment}",
             "requested_by": "{str(id4me)}",
             "requested_for": "{str(id4me)}",
             "subject": "{subject}",
             "service_instance_id": "{str(id_si)}",
+            "internal_note": "{comment}",
+            "category": "incident",
             "impact": "low"
             }}"""
         async with session.post(f'{link}{post_request}',
