@@ -42,7 +42,7 @@ async def enter_code(message: types.Message, state: FSMContext):
             code = randrange(1, 10 ** 6)
             log(msg=f"Generate code[{code}]; id4me[{id4me}]; email[{email}]; user_id[{message.from_user.id}]",
                 level=INFO)
-            send_email(email, f"Здраствуйте! Ваш код подтверждения: {code}")
+            await send_email(email, f"Здраствуйте! Ваш код подтверждения: {code}")
             await message.answer("На ваш e-mail отправлен код подтверждения. Введите код подтверждения из письма:")
             async with state.proxy() as data:
                 data["email"] = email
