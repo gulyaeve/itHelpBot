@@ -9,7 +9,6 @@ from utils import utilities
 
 async def get_json(route):
     """
-    Отправка запроса и получение ответа в виде json
     @param route: request link
     @return: json object answer from host
     """
