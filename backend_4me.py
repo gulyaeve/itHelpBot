@@ -7,24 +7,27 @@ from config import link, headers
 from utils import utilities
 
 
-async def get_id(email):
-    async with aiohttp.ClientSession() as session:
-        try:
-            route = f"people?primary_email={email}"
-            async with session.get(f'{link}{route}', headers=headers, ssl=False) as resp:
-                answer = await resp.json()
-                id4me = answer[0]["id"]
-                log(msg=f"Found id4me[{id4me}]; email[{email}]", level=INFO)
-                return id4me
-        except Exception as _ex:
-            log(msg=f"{_ex}: Unknown email[{email}]", level=INFO)
-            return 0
-
-
 async def get_json(route):
+    """
+    Отправка запроса и получение ответа в виде json
+    @param route: request link
+    @return: json object answer from host
+    """
     async with aiohttp.ClientSession() as session:
         async with session.get(f'{link}{route}', headers=headers, ssl=False) as resp:
             return await resp.json()
+
+
+async def get_id(email):
+    async with aiohttp.ClientSession() as session:
+        try:
+            answer = await get_json(f"people?primary_email={email}")
+            id4me = answer[0]["id"]
+            log(msg=f"Found id4me[{id4me}]; email[{email}]", level=INFO)
+            return id4me
+        except Exception as _ex:
+            log(msg=f"{_ex}: Unknown email[{email}]", level=INFO)
+            return 0
 
 
 async def get_services():
