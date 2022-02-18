@@ -54,6 +54,20 @@ def new_user(user_id):
         return 0
 
 
+def delete_user(user_id):
+    try:
+        users = read('users')
+        del users[user_id]
+        write('users', users)
+
+    except KeyError:
+        log(msg='[error] Ключ не найден (код 3)', level=INFO)
+        return None
+
+    else:
+        return 0
+
+
 def update_user(user_id, field, value):
     try:
         users = read('users')

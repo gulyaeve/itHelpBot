@@ -18,6 +18,17 @@ class Auth(StatesGroup):
     Code = State()
 
 
+@dp.message_handler(commands=["logout"])
+async def cmd_logout(message: types.Message):
+    if str(message.from_user.id) in file_system.read("users"):
+        log(msg=f"Logout user_id[{message.from_user.id}], username[{message.from_user.username}]",
+            level=INFO)
+        file_system.delete_user(str(message.from_user.id))
+        await message.reply("Вы успешно деавторизованы!")
+    else:
+        await message.reply("Вы ещё не авторизованы!")
+
+
 @dp.message_handler(commands=["auth"])
 async def cmd_auth(message: types.Message):
     if str(message.from_user.id) not in file_system.read("users"):
