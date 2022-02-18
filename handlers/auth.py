@@ -77,7 +77,7 @@ async def code_confirm(message: types.Message, state: FSMContext):
         file_system.update_user(telegram_id, "id4me", data["id4me"])
         log(msg=f"Пользователь сохранён id[{telegram_id}]; email[{data['email']}]; id4me[{data['id4me']}]",
             level=INFO)
-        await message.answer("Вы успешно авторизовались!")
+        await message.answer("Вы успешно авторизовались! Для выхода введите команду: /logout")
         await state.finish()
     else:
         log(msg=f"Enter wrong code[{message.text}]; user_id[{message.from_user.id}]", level=INFO)
