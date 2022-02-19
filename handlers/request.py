@@ -86,6 +86,10 @@ async def request_send(message: types.Message, state: FSMContext):
     if message.text == "Отправить":
         data = await state.get_data()
         answer = await send_request(data["id4me"], data["subject"], data["comment"], data["id_si"])
-        await message.answer(f"Запрос успешно отправлен!")
+        await message.answer(f"Запрос успешно отправлен!", reply_markup=types.ReplyKeyboardRemove())
+        try:
+            log(INFO, f"Пользователь [{message.from_user.id}] создал запрос [{answer['id']}]")
+            await message.answer(f"Запросу присвоен номер: {answer['id']}")
+        except:
+            log(INFO, f"Пользователь [{message.from_user.id}] создал запрос [ошибка в номере]")
         await state.finish()
-        log(INFO, f"Пользователь [{message.from_user.id}] создал запрос [{answer['id']}]")
