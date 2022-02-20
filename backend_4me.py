@@ -9,6 +9,7 @@ from utils import utilities
 
 async def get_json(route):
     """
+    Send get request to host
     @param route: request link
     @return: json object answer from host
     """
@@ -17,16 +18,31 @@ async def get_json(route):
             return await resp.json()
 
 
-async def get_id(email):
+async def send_json(route, data):
+    """
+    Send post request to host
+    @param route: request link
+    @param data: json object to send
+    @return: json object from host
+    """
     async with aiohttp.ClientSession() as session:
-        try:
-            answer = await get_json(f"people?primary_email={email}")
-            id4me = answer[0]["id"]
-            log(msg=f"Found id4me[{id4me}]; email[{email}]", level=INFO)
-            return id4me
-        except Exception as _ex:
-            log(msg=f"{_ex}: Unknown email[{email}]", level=INFO)
-            return 0
+        async with session.post(f'{link}{route}',
+                                headers=headers,
+                                data=str(data).encode('Utf-8'),
+                                ssl=False
+                                ) as p:
+            return await p.json()
+
+
+async def get_id(email):
+    try:
+        answer = await get_json(f"people?primary_email={email}")
+        id4me = answer[0]["id"]
+        log(msg=f"Found id4me[{id4me}]; email[{email}]", level=INFO)
+        return id4me
+    except Exception as _ex:
+        log(msg=f"{_ex}: Unknown email[{email}]", level=INFO)
+        return 0
 
 
 async def get_services():
@@ -45,21 +61,15 @@ async def get_subject(id_s):
 
 
 async def send_request(id4me, subject, comment, id_si):
-    async with aiohttp.ClientSession() as session:
-        post_request = 'requests'
-        post_data = f"""{{
-            "created_by": "{str(id4me)}",
-            "requested_by": "{str(id4me)}",
-            "requested_for": "{str(id4me)}",
-            "subject": "{subject}",
-            "service_instance_id": "{str(id_si)}",
-            "internal_note": "{comment}",
-            "category": "incident",
-            "impact": "low"
-            }}"""
-        async with session.post(f'{link}{post_request}',
-                                headers=headers,
-                                data=str(post_data).encode('Utf-8'),
-                                ssl=False
-                                ) as p:
-            return await p.json()
+    post_request = 'requests'
+    post_data = f"""{{
+                "created_by": "{str(id4me)}",
+                "requested_by": "{str(id4me)}",
+                "requested_for": "{str(id4me)}",
+                "subject": "{subject}",
+                "service_instance_id": "{str(id_si)}",
+                "internal_note": "{comment}",
+                "category": "incident",
+                "impact": "low"
+                }}"""
+    return await send_json(post_request, post_data)
