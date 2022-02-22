@@ -10,7 +10,7 @@ from backend_4me import get_id
 from random import randrange
 from logging import log, INFO
 
-email_pattern = r"^([\w-]+(?:\.[\w-]+)*)+[@](edu.mos.ru)"
+email_pattern = r"^[a-zA-Z0-9._%+-]+[@]+[a-zA-Z0-9._%+-]*mos.ru$"
 
 
 class Auth(StatesGroup):
