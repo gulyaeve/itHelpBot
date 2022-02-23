@@ -90,6 +90,8 @@ async def request_send(message: types.Message, state: FSMContext):
         try:
             log(INFO, f"Пользователь [{message.from_user.id}] создал запрос [{answer['id']}]")
             await message.answer(f"Запросу присвоен номер: {answer['id']}")
-        except:
-            log(INFO, f"Пользователь [{message.from_user.id}] создал запрос [ошибка в номере]")
+        except Exception as e:
+            log(INFO, f"Пользователь [{message.from_user.id}] создал запрос [ошибка в номере]: {e}")
         await state.finish()
+    else:
+        return await message.reply("Выберите действие на клавиатуре.")
