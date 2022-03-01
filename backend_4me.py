@@ -1,5 +1,3 @@
-import logging
-
 import aiohttp
 from logging import log, INFO
 
