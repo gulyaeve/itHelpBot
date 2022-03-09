@@ -4,7 +4,10 @@ import os
 telegram_token = os.environ.get("TELEGRAM_API_TOKEN")
 
 # Gmail auth:
+email_server = os.environ.get("EMAIL_SERVER")
+email_port = int(os.environ.get("EMAIL_PORT"))
 sender_email = os.environ.get("SENDER_EMAIL")
+email_login = os.environ.get("EMAIL_LOGIN")
 email_password = os.environ.get("EMAIL_PASSWORD")
 
 # 4me Rest API auth:
