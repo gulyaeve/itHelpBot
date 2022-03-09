@@ -13,5 +13,6 @@ async def send_email(recipient, message):
         msg["Subject"] = "itHelpBot Authorization"
         server.sendmail(sender_email, recipient, msg.as_string())
         log(msg=f"Success email[{recipient}]: {message}", level=INFO)
+        server.quit()
     except Exception as _ex:
         log(msg=f"{_ex}: Failed to send email[{recipient}]", level=INFO)
