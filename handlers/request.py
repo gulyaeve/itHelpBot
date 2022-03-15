@@ -1,6 +1,7 @@
 from aiogram import types
 from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters.state import StatesGroup, State
+
 from keyboards import keyboards
 
 from utils import file_system, utilities
@@ -69,7 +70,7 @@ async def request_subject(message: types.Message, state: FSMContext):
     await Request.Comment.set()
 
 
-@dp.message_handler(state=Request.Comment)
+@dp.message_handler(state=Request.Comment, content_types=types.ContentType.TEXT)
 async def request_comment(message: types.Message, state: FSMContext):
     log(INFO, f"user_id[{message.from_user.id}] comment: {message.text}")
     async with state.proxy() as data:
@@ -79,6 +80,12 @@ async def request_comment(message: types.Message, state: FSMContext):
     await message.answer(f"Тема запроса: {data['subject']}\n"
                          f"Комментарий: {data['comment']}", reply_markup=keyboards.request_submit)
     await Request.Send.set()
+
+
+@dp.message_handler(state=Request.Comment, content_types=types.ContentType.ANY)
+async def request_comment_nonetext(message: types.Message):
+    log(INFO, f"user_id[{message.from_user.id}] comment: {message.text}")
+    return await message.reply("Введите комментарий в текстовом формате:")
 
 
 @dp.message_handler(state=Request.Send)
