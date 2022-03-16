@@ -71,3 +71,11 @@ async def send_request(id4me, subject, comment, id_si):
                 "impact": "low"
                 }}"""
     return await send_json(post_request, post_data)
+
+
+async def check_admin(id4me):
+    answer = await get_json(f'people/{id4me}/teams')
+    return answer
+
+
+
