@@ -2,6 +2,7 @@ from aiogram import types
 from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters.state import StatesGroup, State
 
+from filters import AuthCheck
 from keyboards import keyboards
 
 from utils import file_system, utilities
@@ -18,26 +19,29 @@ class Request(StatesGroup):
     Send = State()
 
 
-@dp.message_handler(commands=["request"])
+@dp.message_handler(AuthCheck(), commands=["request"])
 async def start_request(message: types.Message):
-    if str(message.from_user.id) not in file_system.read("users"):
-        await message.reply("Вы не авторизованы. Для авторизации выберите команду: /auth")
-        log(INFO, f"Non-Auth attempt to create response. userid[{message.from_user.id}]")
-    else:
-        log(INFO, f"userid[{message.from_user.id}] Starting create response")
-        buttons = await get_services()
-        service_keyboard = utilities.make_keyboard(buttons)
-        await message.reply("Выберите услугу", reply_markup=service_keyboard)
-        await Request.Service.set()
+    log(INFO, f"userid[{message.from_user.id}] Starting create response")
+    buttons = await get_services()
+    service_keyboard = utilities.make_keyboard(buttons)
+    await message.reply("Выберите услугу", reply_markup=service_keyboard)
+    await Request.Service.set()
+
+
+@dp.message_handler(commands=["request"])
+async def start_request_non_auth(message: types.Message):
+    await message.reply("Вы не авторизованы. Для авторизации выберите команду: /auth")
+    log(INFO, f"Non-Auth attempt to create response. userid[{message.from_user.id}]")
+    return
 
 
 @dp.message_handler(state=Request.Service)
-async def request_service(message: types.Message, state: FSMContext):
+async def request_service(message: types.Message, state: FSMContext, id4me):
     services = await get_services()
     if message.text in services.values():
         log(INFO, f"user_id[{message.from_user.id}] choose [{message.text}]")
         async with state.proxy() as data:
-            data["id4me"] = utilities.get_id_from_telegram(message.from_user.id)
+            data["id4me"] = id4me
             data["id_s"] = utilities.get_key(services, message.text)
         buttons = await get_service_instance(utilities.get_key(services, message.text))
         instances_keyboard = utilities.make_keyboard(buttons)
@@ -74,7 +78,7 @@ async def request_subject(message: types.Message, state: FSMContext):
 async def request_comment(message: types.Message, state: FSMContext):
     log(INFO, f"user_id[{message.from_user.id}] comment: {message.text}")
     async with state.proxy() as data:
-        data["comment"] = message.text
+        data["comment"] = message.text.replace("\n", " ")
     await message.reply("Проверьте данные вашего запроса перед отправкой:")
     data = await state.get_data()
     await message.answer(f"Тема запроса: {data['subject']}\n"

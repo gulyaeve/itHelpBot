@@ -9,6 +9,7 @@ from send_email import send_email
 from backend_4me import get_id
 from random import randrange
 from logging import log, INFO
+from filters import AuthCheck
 
 email_pattern = r"^[a-zA-Z0-9._%+-]+[@]+[a-zA-Z0-9._%+-]*mos.ru$"
 
@@ -18,26 +19,25 @@ class Auth(StatesGroup):
     Code = State()
 
 
-@dp.message_handler(commands=["logout"])
+@dp.message_handler(AuthCheck(), commands=["logout"])
 async def cmd_logout(message: types.Message):
-    if str(message.from_user.id) in file_system.read("users"):
-        log(msg=f"Logout user_id[{message.from_user.id}], username[{message.from_user.username}]",
-            level=INFO)
-        file_system.delete_user(str(message.from_user.id))
-        await message.reply("Вы успешно деавторизованы!")
-    else:
-        await message.reply("Вы ещё не авторизованы!")
+    log(msg=f"Logout user_id[{message.from_user.id}], username[{message.from_user.username}]",
+        level=INFO)
+    file_system.delete_user(str(message.from_user.id))
+    await message.reply("Вы успешно деавторизованы!")
+
+
+@dp.message_handler(AuthCheck(), commands=["auth"])
+async def cmd_auth(message: types.Message):
+    await message.reply("Вы уже авторизованы!")
 
 
 @dp.message_handler(commands=["auth"])
 async def cmd_auth(message: types.Message):
-    if str(message.from_user.id) not in file_system.read("users"):
-        log(msg=f"Start authentication for user_id[{message.from_user.id}], username[{message.from_user.username}]",
-            level=INFO)
-        await message.reply("Введите ваш e-mail, связанный с СУДИР:")
-        await Auth.Email.set()
-    else:
-        await message.reply("Вы уже авторизованы!")
+    log(msg=f"Start authentication for user_id[{message.from_user.id}], username[{message.from_user.username}]",
+        level=INFO)
+    await message.reply("Введите ваш e-mail, связанный с СУДИР:")
+    await Auth.Email.set()
 
 
 @dp.message_handler(state=Auth.Email)
