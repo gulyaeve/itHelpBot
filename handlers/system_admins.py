@@ -3,7 +3,7 @@ from logging import log, INFO
 from aiogram import types
 from aiogram.dispatcher.filters import Command
 
-from admincheck import AdminCheck
+from filters import AdminCheck
 from loader import dp
 
 
