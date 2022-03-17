@@ -78,4 +78,24 @@ async def check_admin(id4me):
     return answer
 
 
+async def get_requests_for_team(team):
+    answer = await get_json(f'requests/open?team={team}')
+    return answer
+
+
+async def get_requests_for_member(id4me):
+    answer = await get_json(f'requests/open?member={id4me}')
+    return answer
+
+
+async def get_request(request_id):
+    answer = await get_json(f'requests/{request_id}')
+    return answer
+
+
+async def get_notes_for_request(request_id):
+    answer = await get_json(f'requests/{request_id}/notes')
+    return answer
+
+
 

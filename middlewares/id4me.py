@@ -13,4 +13,4 @@ class Get4me(BaseMiddleware):
         if str(user) in file_system.read("users"):
             id4me = utilities.get_id_from_telegram(user)
             data["id4me"] = str(id4me)
-            log(INFO, f"[{user}] [{data=}]")
+            log(INFO, f"Middleware get id4me [{data['id4me']}] for [{user}]")
