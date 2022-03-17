@@ -1,10 +1,9 @@
 from logging import log, INFO
 
 from aiogram import types
-from aiogram.dispatcher.handler import CancelHandler
 from aiogram.dispatcher.middlewares import BaseMiddleware
 
-import utilities
+from utils import utilities
 from utils import file_system
 
 

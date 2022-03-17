@@ -3,7 +3,7 @@ from logging import log, INFO
 from aiogram import types
 from aiogram.dispatcher.filters import BoundFilter
 
-import utilities
+from utils import utilities
 from backend_4me import check_admin
 
 

@@ -5,7 +5,7 @@ from aiogram.dispatcher.filters.state import StatesGroup, State
 from filters import AuthCheck
 from keyboards import keyboards
 
-from utils import file_system, utilities
+from utils import utilities
 from loader import dp
 from backend_4me import get_services, get_service_instance, get_subject, send_request
 from logging import log, INFO
