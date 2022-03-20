@@ -6,13 +6,14 @@ from aiogram import executor
 
 
 async def on_shutdown(dp):
-    await bot.close()
+    await notify_admins(bot_admin, "Бот выключен...")
     await storage.close()
+    await bot.close()
 
 
 async def on_startup(dp):
     await set_default_commands(dp)
-    await notify_admins(bot_admin)
+    await notify_admins(bot_admin, "Бот запущен и готов к работе.")
 
 
 if __name__ == '__main__':

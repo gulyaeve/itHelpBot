@@ -11,8 +11,8 @@ async def set_default_commands(dp):
     ])
 
 
-async def notify_admins(bot_admin):
-    await bot.send_message(bot_admin, "Бот запущен и готов к работе.")
+async def notify_admins(bot_admin, message):
+    await bot.send_message(bot_admin, message)
 
 
 async def make_dict(r_json, key_name, value_name):
