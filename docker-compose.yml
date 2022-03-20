@@ -10,5 +10,8 @@ services:
       - ".env.prod"
     volumes:
       - type: bind
-        source: /home/gulyaeve/Документы/ithelpbot_data
+        source: /home/gulyaeve/Документы/ithelpbot_data/json
         target: /home/json
+      - type: bind
+        source: /home/gulyaeve/Документы/ithelpbot_data/logs
+        target: /home/logs
