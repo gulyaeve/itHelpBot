@@ -3,7 +3,7 @@ import os
 # Telegram auth:
 telegram_token = os.environ.get("TELEGRAM_API_TOKEN")
 
-# Gmail auth:
+# Email auth:
 email_server = os.environ.get("EMAIL_SERVER")
 email_port = int(os.environ.get("EMAIL_PORT"))
 sender_email = os.environ.get("SENDER_EMAIL")
@@ -15,3 +15,6 @@ link = os.environ.get("LINK_4ME")
 token = os.environ.get("TOKEN_4ME")
 account_id = os.environ.get("ACCOUNT_4ME")
 headers = {"Authorization": f"Bearer {token}", "X-4me-Account": account_id}
+
+# Bot admins
+bot_admin = os.environ.get("BOT_ADMIN")
