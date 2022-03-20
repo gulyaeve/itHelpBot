@@ -15,4 +15,4 @@ async def send_email(recipient, message):
         log(msg=f"Success email[{recipient}]: {message}", level=INFO)
         server.quit()
     except Exception as _ex:
-        log(msg=f"{_ex}: Failed to send email[{recipient}]", level=INFO)
+        log(msg=f"{Exception}: {_ex}: Failed to send email[{recipient}]", level=INFO)
