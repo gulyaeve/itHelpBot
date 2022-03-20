@@ -8,5 +8,6 @@ RUN pip install -r requirements.txt
 COPY . .
 RUN mkdir ./json
 RUN echo "{}" > ./json/users.json
+RUN mkdir ./logs
 
 ENTRYPOINT ["python", "app.py"]
