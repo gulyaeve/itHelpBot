@@ -39,7 +39,7 @@ async def get_id(email):
         log(msg=f"Found id4me[{id4me}]; email[{email}]", level=INFO)
         return id4me
     except Exception as _ex:
-        log(msg=f"{_ex}: Unknown email[{email}]", level=INFO)
+        log(msg=f"{Exception}: {_ex}: Unknown email[{email}]", level=INFO)
         return 0
 
 
