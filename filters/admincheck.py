@@ -17,7 +17,7 @@ class AdminCheck(BoundFilter):
             else:
                 return False
         except Exception as err:
-            log(INFO, f"{err}")
+            log(INFO, f"{Exception}: {err}")
             return False
 
 

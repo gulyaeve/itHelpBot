@@ -5,7 +5,7 @@ from utils import file_system
 from loader import bot
 
 
-async def set_default_commands(dp):
+async def set_default_commands():
     return await bot.set_my_commands([
         types.BotCommand(command="/start", description="Начать работу с ботом"),
         types.BotCommand(command="/auth", description="Авторизоваться в 4me"),
