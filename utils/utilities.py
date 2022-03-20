@@ -1,4 +1,6 @@
 from aiogram import types
+
+from config import bot_admin
 from utils import file_system
 from loader import bot
 
@@ -11,7 +13,7 @@ async def set_default_commands(dp):
     ])
 
 
-async def notify_admins(bot_admin, message):
+async def notify_admins(message):
     await bot.send_message(bot_admin, message)
 
 
