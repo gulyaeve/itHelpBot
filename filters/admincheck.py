@@ -17,7 +17,7 @@ class AdminCheck(BoundFilter):
             else:
                 return False
         except Exception as err:
-            log(INFO, f"{Exception}: {err}")
+            log(INFO, f"{Exception}: {err} Пользователь не найден.")
             return False
 
 

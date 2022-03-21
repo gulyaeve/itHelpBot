@@ -5,13 +5,12 @@
       <sourceFolder url="file://$MODULE_DIR$" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/handlers" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/json" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/keyboards" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/utils" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/filters" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/venv" />
       <excludeFolder url="file://$MODULE_DIR$/.idea" />
     </content>
-    <orderEntry type="jdk" jdkName="Python 3.10 (itHelpBot)" jdkType="Python SDK" />
+    <orderEntry type="jdk" jdkName="Python 3.9 (itHelpBot)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
   <component name="PyDocumentationSettings">
