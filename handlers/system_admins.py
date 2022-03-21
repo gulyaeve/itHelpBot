@@ -2,10 +2,10 @@ import re
 from logging import log, INFO
 
 from aiogram import types
-from aiogram.dispatcher.filters import Command, Text
+from aiogram.dispatcher.filters import Command, Text, Regexp
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 
-from backend_4me import check_admin, get_requests_for_team, get_requests_for_member, get_request, get_notes_for_request
+from backend_4me import get_requests_for_member, get_request, get_notes_for_request
 from filters import AdminCheck
 from loader import dp, bot
 from utils.utilities import make_text
@@ -21,9 +21,11 @@ async def admin_start(message: types.Message, id4me):
     inline_keyboard = InlineKeyboardMarkup()
     for request in answer:
         text = str(request["id"]) + ": " + request["subject"]
-        inline_button = InlineKeyboardButton(text=text, callback_data=request["id"])
+        inline_button = InlineKeyboardButton(text=text, callback_data=f'request_id={request["id"]}')
         inline_keyboard.add(inline_button)
     await message.answer(f"Запросы для вас:", reply_markup=inline_keyboard)
+
+
     # await message.reply("Вы в меню администратора")
     # log(INFO, f"Open admin menu. userid[{message.from_user.id}]")
     # answer = await check_admin(id4me)
@@ -39,9 +41,9 @@ async def admin_start(message: types.Message, id4me):
     #     await message.answer(f"Запросы для команды {team_name}:", reply_markup=inline_keyboard)
 
 
-@dp.callback_query_handler(AdminCheck())
+@dp.callback_query_handler(AdminCheck(), Regexp('request_id=([0-9]*)'))
 async def get_request_info(callback: types.CallbackQuery):
-    request_id = callback.data
+    request_id = callback.data.split("=")[1]
     request = await get_request(request_id)
     notes = await get_notes_for_request(request_id)
     report = f'<b>Номер заявки:</b> <code>{request["id"]}</code>\n' \
