@@ -1,3 +1,5 @@
+from logging import log, INFO
+
 from aiogram import types
 
 from config import bot_admin
@@ -14,7 +16,10 @@ async def set_default_commands():
 
 
 async def notify_admins(message):
-    await bot.send_message(bot_admin, message)
+    try:
+        await bot.send_message(bot_admin, message)
+    except:
+        log(INFO, f"Admin [{bot_admin}] block this bot")
 
 
 async def make_dict(r_json, key_name, value_name):
