@@ -7,6 +7,7 @@ from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 from backend_4me import check_admin, get_requests_for_team, get_requests_for_member, get_request, get_notes_for_request
 from filters import AdminCheck
 from loader import dp, bot
+from utilities import make_text
 
 
 @dp.message_handler(Command("admin"), AdminCheck())
@@ -47,5 +48,5 @@ async def get_request_info(callback: types.CallbackQuery):
              f'<b>Время создания:</b> {request["created_at"].replace("T", " ").split("+")[0]}\n' \
              f'<b>Целевое время решения:</b> {request["resolution_target_at"].replace("T", " ").split("+")[0]}\n\n'
     for note in notes:
-        report += f"<i>{note['text']}\n\n</i>"
+        report += f"<i>{make_text(note['text'])}\n\n</i>"
     await bot.send_message(callback.from_user.id, f"{report}")

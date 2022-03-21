@@ -5,6 +5,7 @@ from aiogram import types
 from config import bot_admin
 from utils import file_system
 from loader import bot
+import re
 
 
 async def set_default_commands():
@@ -50,3 +51,7 @@ def make_keyboard(buttons: dict):
 
 def get_id_from_telegram(user_id):
     return file_system.read("users")[str(user_id)]["id4me"]
+
+
+def make_text(input_text):
+    return re.sub(r'<.*?>', '', input_text)
