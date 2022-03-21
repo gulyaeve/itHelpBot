@@ -2,7 +2,7 @@ import re
 from logging import log, INFO
 
 from aiogram import types
-from aiogram.dispatcher.filters import Command, Text, Regexp
+from aiogram.dispatcher.filters import Command, Regexp
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 
 from backend_4me import get_requests_for_member, get_request, get_notes_for_request
