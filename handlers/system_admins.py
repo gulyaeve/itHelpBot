@@ -1,7 +1,8 @@
+import re
 from logging import log, INFO
 
 from aiogram import types
-from aiogram.dispatcher.filters import Command
+from aiogram.dispatcher.filters import Command, Text
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 
 from backend_4me import check_admin, get_requests_for_team, get_requests_for_member, get_request, get_notes_for_request
@@ -43,7 +44,8 @@ async def get_request_info(callback: types.CallbackQuery):
     request_id = callback.data
     request = await get_request(request_id)
     notes = await get_notes_for_request(request_id)
-    report = f'<b>Тема:</b> {request["subject"]}\n' \
+    report = f'<b>Номер заявки:</b> <code>{request["id"]}</code>\n' \
+             f'<b>Тема:</b> {request["subject"]}\n' \
              f'<b>Автор:</b> {request["requested_by"]["name"]}\n' \
              f'<b>Время создания:</b> {request["created_at"].replace("T", " ").split("+")[0]}\n' \
              f'<b>Целевое время решения:</b> {request["resolution_target_at"].replace("T", " ").split("+")[0]}\n\n'
