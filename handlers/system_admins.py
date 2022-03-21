@@ -7,7 +7,7 @@ from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 from backend_4me import check_admin, get_requests_for_team, get_requests_for_member, get_request, get_notes_for_request
 from filters import AdminCheck
 from loader import dp, bot
-from utilities import make_text
+from utils.utilities import make_text
 
 
 @dp.message_handler(Command("admin"), AdminCheck())
