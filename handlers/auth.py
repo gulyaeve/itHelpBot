@@ -36,7 +36,7 @@ async def cmd_auth(message: types.Message):
 async def cmd_auth(message: types.Message):
     log(msg=f"Start authentication for user_id[{message.from_user.id}], username[{message.from_user.username}]",
         level=INFO)
-    await message.reply("Введите ваш e-mail, связанный с СУДИР:")
+    await message.reply("Введите ваш e-mail:")
     await Auth.Email.set()
 
 
@@ -77,7 +77,7 @@ async def code_confirm(message: types.Message, state: FSMContext):
         file_system.update_user(telegram_id, "id4me", data["id4me"])
         log(msg=f"Пользователь сохранён id[{telegram_id}]; email[{data['email']}]; id4me[{data['id4me']}]",
             level=INFO)
-        await message.answer("Вы успешно авторизовались! Для выхода введите команду: /logout")
+        await message.answer("Вы успешно авторизовались!")
         await state.finish()
     else:
         log(msg=f"Enter wrong code[{message.text}]; user_id[{message.from_user.id}]", level=INFO)

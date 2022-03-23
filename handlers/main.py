@@ -44,7 +44,7 @@ async def cmd_start(message: types.Message):
     """
     log(INFO, f"USER WITHOUT AUTH [{message.from_user.id}] нажал START.")
     await message.reply("Добро пожаловать в чат-бот техподдержки!")
-    await message.answer("Вам необходимо авторизоваться: /auth")
+    await message.answer("Для авторизации выберите команду: /auth")
 
 
 # You can use state '*' if you need to handle all states
@@ -58,11 +58,3 @@ async def cancel_handler(message: types.Message, state: FSMContext):
     log(INFO, f"[{message.from_user.id}] отменил действие.")
     await state.finish()
     await message.reply('Действие отменено.', reply_markup=types.ReplyKeyboardRemove())
-
-
-# @dp.message_handler(Text)
-# async def text_handler(message: types.Message):
-#     """
-#     Any text handler
-#     """
-#     log(INFO, f"[{message.from_user.id}] написал: [{message.text}]")
