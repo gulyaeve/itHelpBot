@@ -15,6 +15,7 @@ link = os.environ.get("LINK_4ME")
 token = os.environ.get("TOKEN_4ME")
 account_id = os.environ.get("ACCOUNT_4ME")
 headers = {"Authorization": f"Bearer {token}", "X-4me-Account": account_id}
+id_for_request = os.environ.get("ID_FOR_REQUEST")
 
 # Bot admins
 bot_admin = os.environ.get("BOT_ADMIN")

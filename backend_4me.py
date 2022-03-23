@@ -1,7 +1,7 @@
 import aiohttp
 from logging import log, INFO
 
-from config import link, headers
+from config import link, headers, id_for_request
 from utils import utilities
 
 
@@ -61,8 +61,7 @@ async def get_subject(id_s):
 async def send_request(id4me, subject, comment, id_si):
     post_request = 'requests'
     post_data = f"""{{
-                "created_by": "{str(id4me)}",
-                "requested_by": "{str(id4me)}",
+                "requested_by": "{str(id_for_request)}",
                 "requested_for": "{str(id4me)}",
                 "subject": "{subject}",
                 "service_instance_id": "{str(id_si)}",
