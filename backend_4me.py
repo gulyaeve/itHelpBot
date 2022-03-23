@@ -65,7 +65,7 @@ async def send_request(id4me, subject, comment, id_si):
                 "requested_for": "{str(id4me)}",
                 "subject": "{subject}",
                 "service_instance_id": "{str(id_si)}",
-                "internal_note": "{comment}",
+                "internal_note": "(Отправлено из чат-бота https://t.me/itHelpDigitalCenter_bot) {comment}",
                 "category": "incident",
                 "impact": "low"
                 }}"""
