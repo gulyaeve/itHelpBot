@@ -78,6 +78,7 @@ async def request_reply(callback: types.CallbackQuery, state: FSMContext):
 async def make_reply_to_request(message: types.Message, state: FSMContext):
     data = await state.get_data()
     request_id = data['request_id']
+    text = message.text.replace('\n', ' ') + " (Отправлено из чат-бота https://t.me/itHelpDigitalCenter_bot)"
     answer = await post_note_to_request(request_id, message.text)
     log(INFO, f"ADMIN [{message.from_user.id}] posted note with id [{answer['id']}] to [{request_id}]")
     request = await get_request(request_id)
@@ -85,7 +86,6 @@ async def make_reply_to_request(message: types.Message, state: FSMContext):
     telegram_requested_for = get_telegram_from_id(id4me_requested_for)
     if telegram_requested_for:
         try:
-            text = message.text.replace('\n', ' ')
             bot.send_message(telegram_requested_for, f"К вашей заявке <code>{request_id}</code> добавлен комментарий:\n"
                                                      f"<i>{text}</i>")
             log(INFO, f"Автору [{telegram_requested_for}] запроса [{request_id}] отправлено уведомление.")
