@@ -44,7 +44,7 @@ async def get_id(email):
 
 
 async def get_services():
-    answer = await get_json('services/enabled')
+    answer = await get_json('services/enabled?provider=694')
     return await utilities.make_dict(answer, "id", "name")
 
 

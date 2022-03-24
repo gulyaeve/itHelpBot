@@ -102,7 +102,7 @@ async def request_send(message: types.Message, state: FSMContext):
         await message.answer(f"Запрос успешно отправлен!", reply_markup=types.ReplyKeyboardRemove())
         try:
             log(INFO, f"Пользователь [{message.from_user.id}] создал запрос #[{answer['id']}]")
-            await message.answer(f"Запросу присвоен номер: {answer['id']}")
+            await message.answer(f"Запросу присвоен номер: <code>{answer['id']}</code>")
         except Exception as e:
             log(INFO, f"Пользователь [{message.from_user.id}] создал запрос с ошибкой: {Exception}: {e}")
         await state.finish()
