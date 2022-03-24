@@ -79,7 +79,7 @@ async def make_reply_to_request(message: types.Message, state: FSMContext):
     data = await state.get_data()
     request_id = data['request_id']
     text = message.text.replace('\n', ' ') + " (Отправлено из чат-бота https://t.me/itHelpDigitalCenter_bot)"
-    answer = await post_note_to_request(request_id, message.text)
+    answer = await post_note_to_request(request_id, text)
     log(INFO, f"ADMIN [{message.from_user.id}] posted note with id [{answer['id']}] to [{request_id}]")
     request = await get_request(request_id)
     id4me_requested_for = request['requested_for']['id']
