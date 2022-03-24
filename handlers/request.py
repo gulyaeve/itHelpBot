@@ -78,7 +78,7 @@ async def request_subject(message: types.Message, state: FSMContext):
 async def request_comment(message: types.Message, state: FSMContext):
     log(INFO, f"user_id[{message.from_user.id}] comment: {message.text}")
     async with state.proxy() as data:
-        data["comment"] = message.text.replace("\n", " ")
+        data["comment"] = message.text
     await message.reply("Проверьте данные вашего запроса перед отправкой:")
     data = await state.get_data()
     await message.answer(f"Тема запроса: {data['subject']}\n"

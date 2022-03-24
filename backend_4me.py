@@ -60,6 +60,7 @@ async def get_subject(id_s):
 
 async def send_request(id4me, subject, comment, id_si):
     post_request = 'requests'
+    comment = comment.replace("\n", " ")
     post_data = f"""{{
                 "requested_by": "{str(id_for_request)}",
                 "requested_for": "{str(id4me)}",
@@ -95,6 +96,15 @@ async def get_request(request_id):
 async def get_notes_for_request(request_id):
     answer = await get_json(f'requests/{request_id}/notes')
     return answer
+
+
+async def post_note_to_request(request_id, text):
+    post_request = f"requests/{request_id}/notes"
+    text = text.replace("\n", " ")
+    post_data = f"""{{
+                "text": "{text}"
+                }}"""
+    return await send_json(post_request, post_data)
 
 
 

@@ -54,5 +54,13 @@ def get_id_from_telegram(user_id):
     return file_system.read("users")[str(user_id)]["id4me"]
 
 
+def get_telegram_from_id(id4me):
+    telegram_id = ''
+    for user_id in file_system.read("users"):
+        if user_id["id4me"] == id4me:
+            telegram_id = str(user_id)
+    return telegram_id
+
+
 def make_text(input_text):
     return re.sub(r'<.*?>', '', input_text)
