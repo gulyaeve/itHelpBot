@@ -88,7 +88,7 @@ async def make_reply_to_request(message: types.Message, state: FSMContext):
         try:
             await bot.send_message(telegram_requested_for, f"К вашей заявке <code>{request_id}</code> добавлен "
                                                            f"комментарий:\n\n "
-                                                     f"<i>{text}</i>")
+                                                           f"<i>{text}</i>")
             log(INFO, f"Автору [{telegram_requested_for}] запроса [{request_id}] отправлено уведомление.")
         except:
             pass
