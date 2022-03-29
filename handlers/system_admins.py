@@ -94,5 +94,3 @@ async def make_reply_to_request(message: types.Message, state: FSMContext):
             pass
     await message.answer(f"Комментарий к заявке №{request_id} отправлен.")
     await state.finish()
-
-
