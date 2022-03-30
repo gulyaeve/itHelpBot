@@ -12,14 +12,15 @@ class AdminCheck(BoundFilter):
     async def check(self, message: types.Message):
         try:
             # id4me = utilities.get_id_from_telegram(message.from_user.id)
-            id4me = await db.select_user(telegram_id=message.from_user.id)
-            answer = await check_admin(id4me)
+            user = await db.select_user(telegram_id=message.from_user.id)
+            answer = await check_admin(user["id4me"])
             if answer:
+                log(INFO, f"Пользователь [{message.from_user.id}] входит в техподдержку.")
                 return True
             else:
+                log(INFO, f"Команды техподдержки для пользователя [{message.from_user.id}] не найдены.")
                 return False
-        except Exception as err:
-            log(INFO, f"{Exception}: {err} Пользователь не найден.")
+        except:
             return False
 
 

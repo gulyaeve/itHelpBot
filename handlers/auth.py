@@ -38,11 +38,6 @@ async def cmd_auth(message: types.Message):
 async def cmd_auth(message: types.Message):
     log(msg=f"Start authentication for user_id[{message.from_user.id}], username[{message.from_user.username}]",
         level=INFO)
-    try:
-        await db.add_user(message.from_user.full_name, message.from_user.username, message.from_user.id)
-    except asyncpg.exceptions.UniqueViolationError:
-        user = await db.select_user(telegram_id=message.from_user.id)
-        log(INFO, f"Already in db: {user}")
     await message.reply("Введите ваш e-mail:")
     await Auth.Email.set()
 
@@ -62,7 +57,6 @@ async def enter_code(message: types.Message, state: FSMContext):
                 level=INFO)
             await send_email(email, f"Здраствуйте! Ваш код подтверждения: {code}")
             await message.answer("На ваш e-mail отправлен код подтверждения. Введите код подтверждения из письма:")
-            await db.update_user_email(message.from_user.id, email)
             async with state.proxy() as data:
                 data["email"] = email
                 data["id4me"] = id4me
@@ -80,16 +74,22 @@ async def code_confirm(message: types.Message, state: FSMContext):
     data = await state.get_data()
     if message.text == str(data["code"]):
         log(msg=f"Enter valid code[{message.text}]; user_id[{message.from_user.id}]", level=INFO)
+        try:
+            await db.add_user(message.from_user.full_name, message.from_user.username, message.from_user.id)
+            await db.update_user_email(message.from_user.id, data['email'])
+            await db.update_user_id4me(message.from_user.id, data["id4me"])
+            user = await db.select_user(telegram_id=message.from_user.id)
+            log(INFO, f"Success save to DB: {user}")
+            await message.answer("Вы успешно авторизовались!")
+            await state.finish()
+        except asyncpg.exceptions.UniqueViolationError:
+            user = await db.select_user(telegram_id=message.from_user.id)
+            log(INFO, f"Already in db: {user}")
+            # await message.answer("При авторизации произошла ошибка.")
+            await state.finish()
         # file_system.new_user(message.from_user.id)
         # file_system.update_user(telegram_id, "email", data["email"])
         # file_system.update_user(telegram_id, "id4me", data["id4me"])
-        await db.update_user_id4me(message.from_user.id, data["id4me"])
-        log(msg=f"Пользователь сохранён id[{telegram_id}]; email[{data['email']}]; id4me[{data['id4me']}]",
-            level=INFO)
-        user = await db.select_user(telegram_id=message.from_user.id)
-        log(INFO, f"Запись в БД: {user}")
-        await message.answer("Вы успешно авторизовались!")
-        await state.finish()
     else:
         log(msg=f"Enter wrong code[{message.text}]; user_id[{message.from_user.id}]", level=INFO)
         return await message.answer("Введён неверный код подтверждения.")
