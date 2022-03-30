@@ -96,7 +96,7 @@ class Database:
                 password=config.DB_PASS,
                 host=config.DB_HOST,
                 database=config.DB_NAME,
-                port=5433
+                port=config.DB_PORT
             )
         async with self._pool.acquire() as conn:  # type: asyncpg.Connection
             async with conn.transaction():
