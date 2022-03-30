@@ -1,12 +1,17 @@
-from flask import Flask, request
+from aiohttp import web
 
-app = Flask(__name__)
+routes = web.RouteTableDef()
 
 
-@app.route('/request', methods=['POST'])
-def get_data_from_request():
-    return request.get_data()
+@routes.post('/requests')
+async def hello(request):
+    data = await request.json()
+    print(dict(data))
+    return web.Response(text="Hello, world")
 
+
+app = web.Application()
+app.add_routes(routes)
 
 if __name__ == "__main__":
-    app.run()
+    web.run_app(app, port=5000)
