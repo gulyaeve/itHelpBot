@@ -8,8 +8,8 @@ from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 
 from backend_4me import get_requests_for_member, get_request, get_notes_for_request, post_note_to_request
 from filters import AdminCheck
-from loader import dp, bot
-from utils.utilities import make_text, get_telegram_from_id
+from loader import dp, bot, db
+from utils.utilities import make_text
 
 
 class Action(StatesGroup):
@@ -83,7 +83,8 @@ async def make_reply_to_request(message: types.Message, state: FSMContext):
     log(INFO, f"ADMIN [{message.from_user.id}] posted note with id [{answer['id']}] to [{request_id}]")
     request = await get_request(request_id)
     id4me_requested_for = request['requested_for']['id']
-    telegram_requested_for = get_telegram_from_id(id4me_requested_for)
+    # telegram_requested_for = get_telegram_from_id(id4me_requested_for)
+    telegram_requested_for = db.select_user(id4me=id4me_requested_for)
     if telegram_requested_for:
         try:
             await bot.send_message(telegram_requested_for, f"К вашей заявке <code>{request_id}</code> добавлен "

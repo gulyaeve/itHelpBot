@@ -18,6 +18,7 @@ async def test():
     # user = await db.select_user(id=1234)
     # print(user)
 
+    # await db.delete_user(1)
     # await db.update_user_id4me(1234, 54321)
     # user = await db.select_user(id=1234)
     # print(user)
@@ -32,8 +33,8 @@ async def test():
     users = await db.select_all_users()
     print(f"Получил всех пользователей: {users}")
 
-    # user = await db.select_user(id=5)
-    # print(f"Получил пользователя: {user}")
+    user = await db.select_user(id=5)
+    print(f"Получил пользователя: {user}")
 
 
 asyncio.run(test())

@@ -3,7 +3,7 @@ from logging import log, INFO
 from aiogram import types
 
 from config import bot_admin
-from utils import file_system
+# from utils import file_system
 from loader import bot
 import re
 
@@ -50,16 +50,16 @@ def make_keyboard(buttons: dict):
     return keyboard
 
 
-def get_id_from_telegram(user_id):
-    return file_system.read("users")[str(user_id)]["id4me"]
+# def get_id_from_telegram(user_id):
+#     return file_system.read("users")[str(user_id)]["id4me"]
 
 
-def get_telegram_from_id(id4me):
-    telegram_id = ''
-    for user_id in file_system.read("users"):
-        if file_system.read("users")[user_id]["id4me"] == id4me:
-            telegram_id = str(user_id)
-    return telegram_id
+# def get_telegram_from_id(id4me):
+#     telegram_id = ''
+#     for user_id in file_system.read("users"):
+#         if file_system.read("users")[user_id]["id4me"] == id4me:
+#             telegram_id = str(user_id)
+#     return telegram_id
 
 
 def make_text(input_text):
