@@ -10,7 +10,9 @@ services:
     ports:
       - 5434:5432
     volumes:
-      - ./postgres:/var/lib/postgresql
+      - ./postgres/config:/etc/postgresql
+      - ./postgres/logs:/var/log/postgresql
+      - ./postgres/lib:/var/lib/postgresql
   bot:
     container_name: "ithelpbot_dev"
     build:
