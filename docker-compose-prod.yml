@@ -1,0 +1,27 @@
+version: '3.1'
+
+services:
+  db:
+    container_name: "database"
+    image: "sameersbn/postgresql"
+    env_file:
+     - ".env.prod"
+    restart: always
+    ports:
+      - 5432:5432
+    volumes:
+      - /home/gulyaeve/postgres/config:/etc/postgresql
+      - /home/gulyaeve/postgres/logs:/var/log/postgresql
+      - /home/gulyaeve/postgres/lib:/var/lib/postgresql
+  bot:
+    container_name: "ithelpbot_prod"
+    build:
+      context: .
+    links:
+      - "db:database"
+    restart: always
+    env_file:
+      - ".env.prod"
+    command: python app.py
+    depends_on:
+      - db
