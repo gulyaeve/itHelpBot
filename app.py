@@ -6,7 +6,7 @@ from aiogram import executor
 
 async def on_shutdown(dp):
     await bot.delete_my_commands()
-    await notify_admins("Бот выключен...")
+    # await notify_admins("Бот выключен...")
     await storage.close()
     await bot.close()
 

@@ -1,17 +1,27 @@
-version: '3.9'
+version: '3.1'
 
 services:
-  bot:
-    image: "ithelpbot"
-    container_name: "ithelpbot_prod"
-    restart: always
-    command: python app.py
+  db:
+    container_name: "database"
+    image: "sameersbn/postgresql"
     env_file:
-      - ".env.prod"
+     - ".env.dev"
+    restart: always
+    ports:
+      - 5434:5432
     volumes:
-#      - type: bind
-#        source: /home/gulyaeve/Документы/ithelpbot_data/json
-#        target: /home/json
-      - type: bind
-        source: /home/gulyaeve/Документы/ithelpbot_data/logs
-        target: /home/logs
+      - ./postgres:/var/lib/postgresql
+  bot:
+    container_name: "ithelpbot_dev"
+    build:
+      context: .
+    links:
+      - "db:database"
+    restart: always
+    env_file:
+      - ".env.dev"
+    command: python app.py
+    volumes:
+      - .:/src
+    depends_on:
+      - db

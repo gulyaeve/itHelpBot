@@ -1,13 +1,13 @@
 FROM python:3.10.2-slim-bullseye
 
-WORKDIR /home
+WORKDIR /src
 
-COPY requirements.txt requirements.txt
+COPY requirements.txt /src
 RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
-COPY . .
+COPY . /src
 #RUN mkdir ./json
 #RUN echo "{}" > ./json/users.json
-RUN mkdir ./logs
+RUN mkdir /src/logs
 
-ENTRYPOINT ["python", "app.py"]
+#ENTRYPOINT ["python", "app.py"]

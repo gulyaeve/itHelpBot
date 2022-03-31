@@ -1,2 +1,4 @@
 /json/
 /logs/
+/venv/
+/postgres/

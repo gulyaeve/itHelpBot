@@ -21,14 +21,16 @@ async def get_json(route):
 async def hello(request):
     log(INFO, f"POST request: {request}")
     print(f"POST request: {request}")
+    print(await request.text())
     try:
         log(INFO, f"Try to verify")
         print(f"Try to verify")
         data = await request.json()
-        callback = data["payload"]["callback"]
-        answer = await get_json(callback)
-        log(INFO, f"Answer to verify: {answer}")
-        print(f"Answer to verify: {answer}")
+        if data["event"] == "webhook.verify":
+            callback = data["payload"]["callback"]
+            answer = await get_json(callback)
+            log(INFO, f"Answer to verify: {answer}")
+            print(f"Answer to verify: {answer}")
     except:
         log(INFO, f"WRONG POST request: {request}")
         print(f"WRONG POST request: {request}")
