@@ -70,7 +70,7 @@ async def enter_code(message: types.Message, state: FSMContext):
 
 @dp.message_handler(state=Auth.Code)
 async def code_confirm(message: types.Message, state: FSMContext):
-    telegram_id = str(message.from_user.id)
+    # telegram_id = str(message.from_user.id)
     data = await state.get_data()
     if message.text == str(data["code"]):
         log(msg=f"Enter valid code[{message.text}]; user_id[{message.from_user.id}]", level=INFO)
@@ -80,7 +80,7 @@ async def code_confirm(message: types.Message, state: FSMContext):
             await db.update_user_id4me(message.from_user.id, data["id4me"])
             user = await db.select_user(telegram_id=message.from_user.id)
             log(INFO, f"Success save to DB: {user}")
-            await message.answer("Вы успешно авторизовались!")
+            await message.answer("Вы успешно авторизовались! Для подачи заявки воспользуйтесь командой: /request")
             await state.finish()
         except asyncpg.exceptions.UniqueViolationError:
             user = await db.select_user(telegram_id=message.from_user.id)

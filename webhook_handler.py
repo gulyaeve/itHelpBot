@@ -3,37 +3,44 @@ from logging import log, INFO
 import aiohttp
 from aiohttp import web
 
+from config import bot_admin
+from loader import bot
+
 routes = web.RouteTableDef()
 
 
-async def get_json(route):
+async def send_json(route, data):
     """
-    Send get request to host
+    Send post request to host
     @param route: request link
-    @return: json object answer from host
+    @param data: json object to send
+    @return: json object from host
     """
     async with aiohttp.ClientSession() as session:
-        async with session.get(f'{route}', ssl=False) as resp:
-            return await resp.json()
+        async with session.post(f'{route}',
+                                data=str(data).encode('Utf-8'),
+                                ssl=False
+                                ) as p:
+            return await p.json()
 
 
 @routes.post('/request')
 async def hello(request):
     log(INFO, f"POST request: {request}")
-    print(f"POST request: {request}")
-    print(await request.text())
     try:
-        log(INFO, f"Try to verify")
-        print(f"Try to verify")
         data = await request.json()
         if data["event"] == "webhook.verify":
+            log(INFO, f"Try to verify")
             callback = data["payload"]["callback"]
-            answer = await get_json(callback)
-            log(INFO, f"Answer to verify: {answer}")
-            print(f"Answer to verify: {answer}")
+            reply = {'message': 'webhook.verify'}
+            answer = await send_json(callback, reply)
+            log(INFO, f"Answer from verify: {answer}")
+        else:
+            log(INFO, f"Succses webhook answer:")
+            log(INFO, f"{data}")
+            await bot.send_message(bot_admin, f"Webhook message: {data['payload']}")
     except:
         log(INFO, f"WRONG POST request: {request}")
-        print(f"WRONG POST request: {request}")
     return web.Response(text="{'message':'webhook.verify'}")
 
 
