@@ -4,8 +4,8 @@ from aiogram import types
 from aiogram.dispatcher.middlewares import BaseMiddleware
 
 from loader import db
-from utils import utilities
-from utils import file_system
+# from utils import utilities
+# from utils import file_system
 
 
 class Get4me(BaseMiddleware):
@@ -15,6 +15,12 @@ class Get4me(BaseMiddleware):
             id4me = user["id4me"]
             data["id4me"] = str(id4me)
             log(INFO, f"Middleware get id4me [{data['id4me']}] for [{message.from_user.id}]")
+            if user["full_name"] != message.from_user.full_name:
+                db.update_user_fullname(message.from_user.full_name, message.from_user.id)
+                log(INFO, f"Updated full_name [{message.from_user.full_name}] for [{message.from_user.id}]")
+            if user["username"] != message.from_user.username:
+                db.update_user_username(message.from_user.username, message.from_user.id)
+                log(INFO, f"Updated username [{message.from_user.username}] for [{message.from_user.id}]")
         # user = message.from_user.id
         # if str(user) in file_system.read("users"):
         #     id4me = utilities.get_id_from_telegram(user)

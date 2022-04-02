@@ -36,6 +36,14 @@ class Database:
         sql = "INSERT INTO users (full_name, username, telegram_id) VALUES($1, $2, $3) returning *"
         return await self.execute(sql, full_name, username, telegram_id, fetchrow=True)
 
+    async def update_user_fullname(self, full_name, telegram_id):
+        sql = "UPDATE users SET full_name=$1 WHERE telegram_id=$2"
+        return await self.execute(sql, full_name, telegram_id, execute=True)
+
+    async def update_user_username(self, username, telegram_id):
+        sql = "UPDATE users SET username=$1 WHERE telegram_id=$2"
+        return await self.execute(sql, username, telegram_id, execute=True)
+
     async def update_user_email(self, telegram_id, email):
         sql = "UPDATE users SET email=$2 WHERE telegram_id=$1"
         return await self.execute(sql, telegram_id, email, execute=True)
@@ -56,10 +64,6 @@ class Database:
     async def count_users(self):
         sql = "SELECT COUNT(*) FROM users"
         return await self.execute(sql, fetchval=True)
-
-    async def update_user_username(self, username, telegram_id):
-        sql = "UPDATE users SET username=$1 WHERE telegram_id=$2"
-        return await self.execute(sql, username, telegram_id, execute=True)
 
     async def delete_user(self, telegram_id):
         await self.execute("DELETE FROM users WHERE telegram_id=$1", telegram_id, execute=True)
