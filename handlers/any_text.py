@@ -7,7 +7,7 @@ from aiogram.types import ContentType, InlineKeyboardMarkup, InlineKeyboardButto
 
 from config import bot_admin
 from loader import dp, bot
-from utilities import notify_admins
+# from utilities import notify_admins
 
 
 @dp.message_handler(Text)

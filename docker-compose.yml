@@ -5,7 +5,7 @@ services:
     container_name: "database"
     image: "sameersbn/postgresql"
     env_file:
-     - ".env.dev"
+      - ".env.dev"
     restart: always
     ports:
       - 5434:5432
@@ -17,8 +17,6 @@ services:
     container_name: "ithelpbot_dev"
     build:
       context: .
-    links:
-      - "db:database"
     restart: always
     env_file:
       - ".env.dev"
@@ -27,3 +25,16 @@ services:
       - .:/src
     depends_on:
       - db
+  webhook_handler:
+    container_name: "webhook_ithelpbot_dev"
+    build:
+      context: .
+    restart: always
+    env_file:
+      - ".env.dev"
+    command: python webhook_handler.py
+    volumes:
+      - .:/src
+networks:
+  botnet:
+    driver: bridge
