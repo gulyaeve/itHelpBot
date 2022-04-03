@@ -16,10 +16,10 @@ class Get4me(BaseMiddleware):
             data["id4me"] = str(id4me)
             log(INFO, f"Middleware get id4me [{data['id4me']}] for [{message.from_user.id}]")
             if user["full_name"] != message.from_user.full_name:
-                db.update_user_fullname(message.from_user.full_name, message.from_user.id)
+                await db.update_user_fullname(message.from_user.full_name, message.from_user.id)
                 log(INFO, f"Updated full_name [{message.from_user.full_name}] for [{message.from_user.id}]")
             if user["username"] != message.from_user.username:
-                db.update_user_username(message.from_user.username, message.from_user.id)
+                await db.update_user_username(message.from_user.username, message.from_user.id)
                 log(INFO, f"Updated username [{message.from_user.username}] for [{message.from_user.id}]")
         # user = message.from_user.id
         # if str(user) in file_system.read("users"):
