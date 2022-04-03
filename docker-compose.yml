@@ -37,6 +37,3 @@ services:
     command: python webhook_handler.py
     volumes:
       - .:/src
-networks:
-  botnet:
-    driver: bridge

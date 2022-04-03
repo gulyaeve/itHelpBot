@@ -1,10 +1,12 @@
 import asyncpg
 from aiogram import types
 from aiogram.dispatcher import FSMContext
+from aiogram.dispatcher.filters import state
 from aiogram.dispatcher.filters.state import StatesGroup, State
 
 from re import match
 # from utils import file_system
+from keyboards import keyboards
 from loader import dp, db
 from send_email import send_email
 from backend_4me import get_id
@@ -18,15 +20,6 @@ email_pattern = r"^[a-zA-Z0-9._%+-]+[@]+[a-zA-Z0-9._%+-]*mos.ru$"
 class Auth(StatesGroup):
     Email = State()
     Code = State()
-
-
-@dp.message_handler(AuthCheck(), commands=["logout"])
-async def cmd_logout(message: types.Message):
-    log(msg=f"Logout user_id[{message.from_user.id}], username[{message.from_user.username}]",
-        level=INFO)
-    # file_system.delete_user(str(message.from_user.id))
-    await db.delete_user(message.from_user.id)
-    await message.reply("Вы успешно деавторизованы!")
 
 
 @dp.message_handler(AuthCheck(), commands=["auth"])
@@ -80,7 +73,8 @@ async def code_confirm(message: types.Message, state: FSMContext):
             await db.update_user_id4me(message.from_user.id, data["id4me"])
             user = await db.select_user(telegram_id=message.from_user.id)
             log(INFO, f"Success save to DB: {user}")
-            await message.answer("Вы успешно авторизовались! Для подачи заявки воспользуйтесь командой: /request")
+            await message.answer("Вы успешно авторизовались! "
+                                 "Для подачи заявки на техподдержку воспользуйтесь командой: <b>/request</b>")
             await state.finish()
         except asyncpg.exceptions.UniqueViolationError:
             user = await db.select_user(telegram_id=message.from_user.id)

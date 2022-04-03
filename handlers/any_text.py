@@ -2,12 +2,11 @@ from logging import log, INFO
 
 from aiogram import types
 from aiogram.dispatcher import FSMContext
-from aiogram.dispatcher.filters import Text, Regexp, state
+from aiogram.dispatcher.filters import Text, Regexp
 from aiogram.types import ContentType, InlineKeyboardMarkup, InlineKeyboardButton
 
 from config import bot_admin
 from loader import dp, bot
-# from utilities import notify_admins
 
 
 @dp.message_handler(Text)
@@ -20,7 +19,8 @@ async def text_handler(message: types.Message):
     inline_button = InlineKeyboardButton(text="Ответить", callback_data=f'reply_from_anytext_id={message.from_user.id}')
     inline_keyboard.add(inline_button)
     await bot.send_message(bot_admin,
-                           f"[{message.from_user.username}; {message.from_user.id}] написал:\n\n<i>{message.text}</i>",
+                           f"[{message.from_user.full_name}; {message.from_user.username}; {message.from_user.id}] "
+                           f"написал:\n\n<i>{message.text}</i>",
                            reply_markup=inline_keyboard)
 
 
@@ -46,4 +46,7 @@ async def content_handler(message: types.Message):
     """
     Any content handler
     """
+    await bot.send_message(bot_admin,
+                           f"[{message.from_user.full_name}; {message.from_user.username}; {message.from_user.id}]"
+                           f" отправил: {message.content_type}")
     log(INFO, f"[{message.from_user.id}] отправил: {message.content_type}")
