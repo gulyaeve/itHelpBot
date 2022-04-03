@@ -28,7 +28,7 @@ async def cmd_auth(message: types.Message):
 
 
 @dp.message_handler(commands=["auth"])
-async def cmd_auth(message: types.Message):
+async def cmd_auth_all(message: types.Message):
     log(msg=f"Start authentication for user_id[{message.from_user.id}], username[{message.from_user.username}]",
         level=INFO)
     await message.reply("Введите ваш e-mail:")
