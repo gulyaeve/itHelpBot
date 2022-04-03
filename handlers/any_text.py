@@ -19,9 +19,9 @@ async def text_handler(message: types.Message):
     inline_keyboard = InlineKeyboardMarkup()
     inline_button = InlineKeyboardButton(text="Ответить", callback_data=f'reply_from_anytext_id={message.from_user.id}')
     inline_keyboard.add(inline_button)
-    bot.send_message(bot_admin,
-                     f"[{message.from_user.username}; {message.from_user.id}] написал:\n\n<i>{message.text}</i>",
-                     reply_markup=inline_keyboard)
+    await bot.send_message(bot_admin,
+                           f"[{message.from_user.username}; {message.from_user.id}] написал:\n\n<i>{message.text}</i>",
+                           reply_markup=inline_keyboard)
 
 
 @dp.callback_query_handler(Regexp('reply_from_anytext_id=([0-9]*)'))
@@ -36,7 +36,7 @@ async def answer_to_text(callback: types.CallbackQuery, state: FSMContext):
 @dp.message_handler(state="ANSWER_TO_ANY_TEXT")
 async def send_answer_to_text(message: types.Message, state: FSMContext):
     data = await state.get_data()
-    bot.send_message(data["reply_user_id"], message.text)
+    await bot.send_message(data["reply_user_id"], message.text)
     log(INFO, f'Пользователю [{data["reply_user_id"]}] отправлено: {message.text}')
     await state.finish()
 
