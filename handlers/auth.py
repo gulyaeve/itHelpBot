@@ -1,12 +1,9 @@
 import asyncpg
 from aiogram import types
 from aiogram.dispatcher import FSMContext
-from aiogram.dispatcher.filters import state
 from aiogram.dispatcher.filters.state import StatesGroup, State
 
 from re import match
-# from utils import file_system
-from keyboards import keyboards
 from loader import dp, db
 from send_email import send_email
 from backend_4me import get_id
