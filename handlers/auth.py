@@ -70,7 +70,7 @@ async def code_confirm(message: types.Message, state: FSMContext):
             await db.update_user_id4me(message.from_user.id, data["id4me"])
             user = await db.select_user(telegram_id=message.from_user.id)
             log(INFO, f"Success save to DB: {user}")
-            await message.answer("Вы успешно авторизовались! "
+            await message.answer("Вы успешно авторизовались!\n"
                                  "Для подачи заявки на техподдержку воспользуйтесь командой: <b>/request</b>")
             await state.finish()
         except asyncpg.exceptions.UniqueViolationError:

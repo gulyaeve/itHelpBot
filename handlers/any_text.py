@@ -15,11 +15,12 @@ async def text_handler(message: types.Message):
     Any text handler
     """
     log(INFO, f"[{message.from_user.id}] написал: {message.text}")
+    await message.answer("ℹ️ Для получения справки по командам чат-бота выберите команду:\n<b>/help</b>")
     inline_keyboard = InlineKeyboardMarkup()
     inline_button = InlineKeyboardButton(text="Ответить", callback_data=f'reply_from_anytext_id={message.from_user.id}')
     inline_keyboard.add(inline_button)
     await bot.send_message(bot_admin,
-                           f"[{message.from_user.full_name}; {message.from_user.username}; {message.from_user.id}] "
+                           f"[{message.from_user.full_name}; @{message.from_user.username}; {message.from_user.id}] "
                            f"написал:\n\n<i>{message.text}</i>",
                            reply_markup=inline_keyboard)
 
@@ -46,7 +47,9 @@ async def content_handler(message: types.Message):
     """
     Any content handler
     """
-    await bot.send_message(bot_admin,
-                           f"[{message.from_user.full_name}; {message.from_user.username}; {message.from_user.id}]"
-                           f" отправил: {message.content_type}")
     log(INFO, f"[{message.from_user.id}] отправил: {message.content_type}")
+    await message.answer("ℹ️ Для получения справки по командам чат-бота выберите команду:\n<b>/help</b>")
+    await bot.send_message(bot_admin,
+                           f"[{message.from_user.full_name}; @{message.from_user.username}; {message.from_user.id}]"
+                           f" отправил: {message.content_type}")
+    await message.forward(bot_admin)

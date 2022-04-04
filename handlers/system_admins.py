@@ -17,7 +17,7 @@ class Action(StatesGroup):
     Close = State()
 
 
-@dp.message_handler(Command("admin"), AdminCheck())
+@dp.message_handler(AdminCheck(), Command("admin"))
 async def admin_start(message: types.Message, id4me):
     log(INFO, f"Open admin menu. userid[{message.from_user.id}]")
     answer = await get_requests_for_member(id4me)
@@ -30,6 +30,11 @@ async def admin_start(message: types.Message, id4me):
         inline_button = InlineKeyboardButton(text=text, callback_data=f'request_id={request["id"]}')
         inline_keyboard.add(inline_button)
     await message.answer(f"Запросы для вас:", reply_markup=inline_keyboard)
+
+
+@dp.message_handler(Command("admin"))
+async def non_admin_start(message: types.Message):
+    await message.reply("Данная команда доступна для использования только инженерам технической поддержки.")
 
     # await message.reply("Вы в меню администратора")
     # log(INFO, f"Open admin menu. userid[{message.from_user.id}]")
