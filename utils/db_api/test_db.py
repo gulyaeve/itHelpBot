@@ -29,12 +29,15 @@ async def test():
     # await db.add_user("1", "1", 23324234)
     # await db.add_user("John", "JohnDoe", 4388229)
     # print("Готово")
+    # await db.add_user("Eugene", "start", 1234)
 
     users = await db.select_all_users()
     print(f"Получил всех пользователей: {users}")
+    await db.update_user_id4me(1234, None)
 
-    user = await db.select_user(id=5)
+    user = await db.select_user(telegram_id=1234)
     print(f"Получил пользователя: {user}")
+    print(user["id4me"])
 
-
-asyncio.run(test())
+if __name__ == "__main__":
+    asyncio.run(test())

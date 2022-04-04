@@ -1,18 +1,18 @@
-version: '3.1'
+version: '3.9'
 
 services:
-  db:
-    container_name: "database"
-    image: "sameersbn/postgresql"
-    env_file:
-      - ".env.dev"
-    restart: always
-    ports:
-      - 5434:5432
-    volumes:
-      - ./postgres/config:/etc/postgresql
-      - ./postgres/logs:/var/log/postgresql
-      - ./postgres/lib:/var/lib/postgresql
+#  db:
+#    container_name: "database"
+#    image: "sameersbn/postgresql"
+#    env_file:
+#      - ".env.dev"
+#    restart: always
+#    ports:
+#      - 5434:5432
+#    volumes:
+#      - ./postgres/config:/etc/postgresql
+#      - ./postgres/logs:/var/log/postgresql
+#      - ./postgres/lib:/var/lib/postgresql
   bot:
     container_name: "ithelpbot_dev"
     build:
@@ -23,17 +23,19 @@ services:
     command: python app.py
     volumes:
       - .:/src
-    depends_on:
-      - db
-  webhook_handler:
-    container_name: "webhook_ithelpbot_dev"
-    build:
-      context: .
-    restart: always
-    ports:
-      - 5000:5000
-    env_file:
-      - ".env.dev"
-    command: python webhook_handler.py
-    volumes:
-      - .:/src
+    network_mode: "host"
+#    depends_on:
+#      - db
+
+#  webhook_handler:
+#    container_name: "webhook_ithelpbot_dev"
+#    build:
+#      context: .
+#    restart: always
+#    ports:
+#      - 5000:5000
+#    env_file:
+#      - ".env.dev"
+#    command: python webhook_handler.py
+#    volumes:
+#      - .:/src

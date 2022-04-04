@@ -23,8 +23,9 @@ async def cmd_logout_all(message: types.Message):
 @dp.message_handler(Text(equals="да", ignore_case=True), state="confirm")
 async def logout_yes(message: types.Message, state: FSMContext):
     log(INFO, f"Logout user_id[{message.from_user.id}], username[{message.from_user.username}]")
-    await db.delete_user(message.from_user.id)
-    await message.reply("Вы успешно деавторизованы!"
+    # await db.delete_user(message.from_user.id)
+    await db.update_user_id4me(message.from_user.id, None)
+    await message.reply("Вы успешно деавторизованы! "
                         "Для повторной авторизации выберите команду: <b>/auth</b>",
                         reply_markup=ReplyKeyboardRemove())
     await state.finish()

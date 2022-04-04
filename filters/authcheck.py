@@ -11,14 +11,14 @@ class AuthCheck(BoundFilter):
     async def check(self, message: types.Message):
         try:
             user = await db.select_user(telegram_id=message.from_user.id)
-            if user is None:
+            if user["id4me"] is None:
                 log(INFO, f"Пользователь в БД не найден [{message.from_user.id}]")
                 return False
             else:
-                log(INFO, f"Найдена запись в БД: [{user}]")
+                log(INFO, f"[{message.from_user.id}] Найдена запись в БД: [{user['id4me']}]")
                 return True
         except Exception as err:
-            log(INFO, f"{Exception}: {err} Пользователь не найден.")
+            log(INFO, f"[{message.from_user.id}] Пользователь не найден. {err}")
             return False
         # log(INFO, f"{message.from_user.id}: {str(message.from_user.id) in file_system.read('users')}")
         # return str(message.from_user.id) in file_system.read("users")
