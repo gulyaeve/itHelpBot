@@ -2,27 +2,26 @@ from logging import log, INFO
 
 from aiogram import types
 from aiogram.dispatcher import FSMContext
-from aiogram.dispatcher.filters import Text, Regexp
+from aiogram.dispatcher.filters import Regexp
 from aiogram.types import ContentType, InlineKeyboardMarkup, InlineKeyboardButton
 
 from config import bot_admin
 from loader import dp, bot
 
 
-@dp.message_handler(Text)
-async def text_handler(message: types.Message):
+@dp.message_handler(content_types=ContentType.ANY)
+async def content_handler(message: types.Message):
     """
-    Any text handler
+    Any content handler
     """
-    log(INFO, f"[{message.from_user.id}] написал: {message.text}")
+    log(INFO, f"[{message.from_user.id}] отправил: {message.content_type}")
     await message.answer("ℹ️ Для получения справки по командам чат-бота выберите команду:\n<b>/help</b>")
-    inline_keyboard = InlineKeyboardMarkup()
-    inline_button = InlineKeyboardButton(text="Ответить", callback_data=f'reply_from_anytext_id={message.from_user.id}')
-    inline_keyboard.add(inline_button)
+    inline_keyboard = InlineKeyboardMarkup(inline_keyboard=[[
+        InlineKeyboardButton(text="Ответить", callback_data=f'reply_from_anytext_id={message.from_user.id}')]])
+    await message.forward(bot_admin)
     await bot.send_message(bot_admin,
-                           f"[{message.from_user.full_name}; @{message.from_user.username}; {message.from_user.id}] "
-                           f"написал:\n\n<i>{message.text}</i>",
-                           reply_markup=inline_keyboard)
+                           f"[{message.from_user.full_name}; @{message.from_user.username}; {message.from_user.id}]"
+                           f" отправил: {message.content_type}", reply_markup=inline_keyboard)
 
 
 @dp.callback_query_handler(Regexp('reply_from_anytext_id=([0-9]*)'))
@@ -37,19 +36,7 @@ async def answer_to_text(callback: types.CallbackQuery, state: FSMContext):
 @dp.message_handler(state="ANSWER_TO_ANY_TEXT")
 async def send_answer_to_text(message: types.Message, state: FSMContext):
     data = await state.get_data()
+    # await message.forward(data["reply_user_id"])
     await bot.send_message(data["reply_user_id"], message.text)
     log(INFO, f'Пользователю [{data["reply_user_id"]}] отправлено: {message.text}')
     await state.finish()
-
-
-@dp.message_handler(content_types=ContentType.ANY)
-async def content_handler(message: types.Message):
-    """
-    Any content handler
-    """
-    log(INFO, f"[{message.from_user.id}] отправил: {message.content_type}")
-    await message.answer("ℹ️ Для получения справки по командам чат-бота выберите команду:\n<b>/help</b>")
-    await bot.send_message(bot_admin,
-                           f"[{message.from_user.full_name}; @{message.from_user.username}; {message.from_user.id}]"
-                           f" отправил: {message.content_type}")
-    await message.forward(bot_admin)
