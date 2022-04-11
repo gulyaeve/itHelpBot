@@ -41,6 +41,7 @@ async def hello(request):
             await bot.send_message(bot_admin, f"Webhook message: {data['payload']}")
     except:
         log(INFO, f"WRONG POST request: {request}")
+        await bot.send_message(1130538822, f"{request}")
     return web.Response(text="{'message':'webhook.verify'}")
 
 
