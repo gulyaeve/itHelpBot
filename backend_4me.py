@@ -60,16 +60,16 @@ async def get_subject(id_s):
 
 async def send_request(id4me, subject, comment, id_si):
     post_request = 'requests'
-    comment = comment.replace("\n", " ")
-    post_data = f"""{{
-                "requested_by": "{str(id_for_request)}",
-                "requested_for": "{str(id4me)}",
-                "subject": "{subject}",
-                "service_instance_id": "{str(id_si)}",
-                "internal_note": "{comment} (Отправлено из чат-бота https://t.me/itHelpDigitalCenter_bot)",
-                "category": "incident",
-                "impact": "low"
-                }}"""
+    comment = comment.replace('\n', ' ').replace("'", '"')
+    post_data = f'''{{
+                'requested_by': '{str(id_for_request)}',
+                'requested_for': '{str(id4me)}',
+                'subject': '{subject}',
+                'service_instance_id': '{str(id_si)}',
+                'internal_note': '{comment} (Отправлено из чат-бота https://t.me/itHelpDigitalCenter_bot)',
+                'category': 'incident',
+                'impact': 'low'
+                }}'''
     return await send_json(post_request, post_data)
 
 
@@ -100,10 +100,10 @@ async def get_notes_for_request(request_id):
 
 async def post_note_to_request(request_id, text):
     post_request = f"requests/{request_id}/notes"
-    text = text.replace("\n", " ")
-    post_data = f"""{{
-                "text": "{text}"
-                }}"""
+    text = text.replace('\n', ' ')
+    post_data = f'''{{
+                'text': '{text}'
+                }}'''
     return await send_json(post_request, post_data)
 
 
