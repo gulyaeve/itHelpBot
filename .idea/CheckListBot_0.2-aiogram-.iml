@@ -12,6 +12,9 @@
     <orderEntry type="jdk" jdkName="Python 3.10 (itHelpBot)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
+  <component name="PackageRequirementsSettings">
+    <option name="versionSpecifier" value="Greater or equal (&gt;=x.y.z)" />
+  </component>
   <component name="PyDocumentationSettings">
     <option name="format" value="EPYTEXT" />
     <option name="myDocStringFormat" value="Epytext" />
