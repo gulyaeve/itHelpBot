@@ -6,8 +6,8 @@ from filters import AuthCheck
 from keyboards import keyboards
 
 from utils import utilities
-from loader import dp
-from backend_4me import get_services, get_service_instance, get_subject, send_request
+from loader import dp, fourme
+# from backend_4me import get_services, get_service_instance, get_subject, send_request
 from logging import log, INFO
 
 
@@ -22,7 +22,7 @@ class Request(StatesGroup):
 @dp.message_handler(AuthCheck(), commands=["request"])
 async def start_request(message: types.Message):
     log(INFO, f"userid[{message.from_user.id}] Starting create response")
-    buttons = await get_services()
+    buttons = await fourme.get_services()
     service_keyboard = utilities.make_keyboard(buttons)
     await message.reply("Выберите услугу", reply_markup=service_keyboard)
     await Request.Service.set()
@@ -37,13 +37,13 @@ async def start_request_non_auth(message: types.Message):
 
 @dp.message_handler(state=Request.Service)
 async def request_service(message: types.Message, state: FSMContext, id4me):
-    services = await get_services()
+    services = await fourme.get_services()
     if message.text in services.values():
         log(INFO, f"user_id[{message.from_user.id}] choose [{message.text}]")
         async with state.proxy() as data:
             data["id4me"] = id4me
             data["id_s"] = utilities.get_key(services, message.text)
-        buttons = await get_service_instance(utilities.get_key(services, message.text))
+        buttons = await fourme.get_service_instance(utilities.get_key(services, message.text))
         instances_keyboard = utilities.make_keyboard(buttons)
         await message.reply("Выберите компонент услуги:", reply_markup=instances_keyboard)
         await Request.Service_instance.set()
@@ -54,12 +54,12 @@ async def request_service(message: types.Message, state: FSMContext, id4me):
 @dp.message_handler(state=Request.Service_instance)
 async def request_service_instance(message: types.Message, state: FSMContext):
     data = await state.get_data()
-    service_instance = await get_service_instance(data["id_s"])
+    service_instance = await fourme.get_service_instance(data["id_s"])
     if message.text in service_instance.values():
         log(INFO, f"user_id[{message.from_user.id}] choose [{message.text}]")
         async with state.proxy() as data:
             data["id_si"] = utilities.get_key(service_instance, message.text)
-        buttons = await get_subject(data["id_s"])
+        buttons = await fourme.get_subject(data["id_s"])
         subject_keyboard = utilities.make_keyboard(buttons)
         await message.reply("Выберите тему:", reply_markup=subject_keyboard)
         await Request.Subject.set()
@@ -96,7 +96,7 @@ async def request_comment_nonetext(message: types.Message):
 async def request_send(message: types.Message, state: FSMContext):
     if message.text == "Отправить":
         data = await state.get_data()
-        answer = await send_request(data["id4me"], data["subject"], data["comment"], data["id_si"])
+        answer = await fourme.send_request(data["id4me"], data["subject"], data["comment"], data["id_si"])
         log(INFO, f"Пользователь [{message.from_user.id}] создал запрос:")
         log(INFO, f"{answer}")
         await message.answer(f"Запрос успешно отправлен!", reply_markup=types.ReplyKeyboardRemove())

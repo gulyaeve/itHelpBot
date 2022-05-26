@@ -6,9 +6,9 @@ from aiogram.dispatcher.filters import Command, Regexp
 from aiogram.dispatcher.filters.state import StatesGroup, State
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 
-from backend_4me import get_requests_for_member, get_request, get_notes_for_request, post_note_to_request
+# from backend_4me import get_requests_for_member, get_request, get_notes_for_request, post_note_to_request
 from filters import AdminCheck
-from loader import dp, bot, db
+from loader import dp, bot, db, fourme
 from utils.utilities import make_text
 
 
@@ -20,7 +20,7 @@ class Action(StatesGroup):
 @dp.message_handler(AdminCheck(), Command("admin"))
 async def admin_start(message: types.Message, id4me):
     log(INFO, f"Open admin menu. userid[{message.from_user.id}]")
-    answer = await get_requests_for_member(id4me)
+    answer = await fourme.get_requests_for_member(id4me)
     if not answer:
         await message.answer("В настоящий момент вам не назначены запросы.")
         return
@@ -54,8 +54,8 @@ async def non_admin_start(message: types.Message):
 @dp.callback_query_handler(AdminCheck(), Regexp('request_id=([0-9]*)'))
 async def get_request_info(callback: types.CallbackQuery):
     request_id = callback.data.split("=")[1]
-    request = await get_request(request_id)
-    notes = await get_notes_for_request(request_id)
+    request = await fourme.get_request(request_id)
+    notes = await fourme.get_notes_for_request(request_id)
     report = f'<b>Номер заявки:</b> <code>{request["id"]}</code>\n' \
              f'<b>Тема:</b> {request["subject"]}\n' \
              f'<b>Автор:</b> {request["requested_by"]["name"]}\n' \
@@ -84,9 +84,9 @@ async def make_reply_to_request(message: types.Message, state: FSMContext):
     data = await state.get_data()
     request_id = data['request_id']
     text = message.text.replace('\n', ' ') + " (Отправлено из чат-бота https://t.me/itHelpDigitalCenter_bot)"
-    answer = await post_note_to_request(request_id, text)
+    answer = await fourme.post_note_to_request(request_id, text)
     log(INFO, f"ADMIN [{message.from_user.id}] posted note with id [{answer['id']}] to [{request_id}]")
-    request = await get_request(request_id)
+    request = await fourme.get_request(request_id)
     id4me_requested_for = request['requested_for']['id']
     # telegram_requested_for = get_telegram_from_id(id4me_requested_for)
     telegram_requested_for = db.select_user(id4me=id4me_requested_for)

@@ -25,16 +25,16 @@ async def notify_admins(message):
         log(INFO, f"Admin [{bot_admin}] block this bot")
 
 
-async def make_dict(r_json, key_name, value_name):
-    keys = []
-    values = []
-    for item in r_json:
-        for attribute, value in item.items():
-            if attribute == key_name:
-                keys.append(value)
-            if attribute == value_name:
-                values.append(value)
-    return dict(zip(keys, values))
+# async def make_dict(r_json, key_name, value_name):
+#     keys = []
+#     values = []
+#     for item in r_json:
+#         for attribute, value in item.items():
+#             if attribute == key_name:
+#                 keys.append(value)
+#             if attribute == value_name:
+#                 values.append(value)
+#     return dict(zip(keys, values))
 
 
 def get_key(d: dict, value):

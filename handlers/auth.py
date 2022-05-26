@@ -3,9 +3,9 @@ from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters.state import StatesGroup, State
 
 from re import match
-from loader import dp, db
+from loader import dp, db, fourme
 from send_email import send_email
-from backend_4me import get_id
+# from backend_4me import get_id
 from random import randrange
 from logging import log, INFO
 from filters import AuthCheck
@@ -35,7 +35,7 @@ async def cmd_auth_all(message: types.Message):
 async def enter_code(message: types.Message, state: FSMContext):
     email = message.text
     if match(email_pattern, message.text):
-        id4me = await get_id(email)
+        id4me = await fourme.get_id(email)
         if id4me == 0:
             log(msg=f"Invalid email[{email}]; user_id[{message.from_user.id}]", level=INFO)
             await message.answer("Пользователь не найден.")

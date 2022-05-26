@@ -20,6 +20,3 @@ class AuthCheck(BoundFilter):
         except Exception as err:
             log(INFO, f"[{message.from_user.id}] Пользователь не найден. {err}")
             return False
-        # log(INFO, f"{message.from_user.id}: {str(message.from_user.id) in file_system.read('users')}")
-        # return str(message.from_user.id) in file_system.read("users")
-

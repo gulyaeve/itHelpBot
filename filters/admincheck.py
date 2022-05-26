@@ -3,9 +3,9 @@ from logging import log, INFO
 from aiogram import types
 from aiogram.dispatcher.filters import BoundFilter
 
-from loader import db
-from utils import utilities
-from backend_4me import check_admin
+from loader import db, fourme
+# from utils import utilities
+# from backend_4me import check_admin
 
 
 class AdminCheck(BoundFilter):
@@ -14,7 +14,7 @@ class AdminCheck(BoundFilter):
             # id4me = utilities.get_id_from_telegram(message.from_user.id)
             user = await db.select_user(telegram_id=message.from_user.id)
             if user["id4me"] is not None:
-                answer = await check_admin(user["id4me"])
+                answer = await fourme.check_admin(user["id4me"])
                 if answer:
                     log(INFO, f"Пользователь [{message.from_user.id}] входит в техподдержку.")
                     return True

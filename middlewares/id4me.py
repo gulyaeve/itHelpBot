@@ -4,8 +4,6 @@ from aiogram import types
 from aiogram.dispatcher.middlewares import BaseMiddleware
 
 from loader import db
-# from utils import utilities
-# from utils import file_system
 
 
 class Get4me(BaseMiddleware):

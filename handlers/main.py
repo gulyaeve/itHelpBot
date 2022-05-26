@@ -4,8 +4,8 @@ from aiogram.dispatcher.filters import Text
 from logging import log, INFO
 from filters import AuthCheck, AdminCheck
 
-from backend_4me import check_admin
-from loader import dp
+# from backend_4me import check_admin
+from loader import dp, fourme
 
 
 @dp.message_handler(commands=['help'])
@@ -27,7 +27,7 @@ async def cmd_start_admin(message: types.Message, id4me):
     log(INFO, f"ADMIN [{message.from_user.id}] нажал START.")
     await message.reply("Добро пожаловать в чат-бот техподдержки! 🧰 💻")
     await message.answer("🔧 Для создания запроса на техподдержку выберите команду:\n<b>/request</b>")
-    answer = await check_admin(id4me)
+    answer = await fourme.check_admin(id4me)
     teams = []
     team_names = []
     for team in answer:
@@ -43,7 +43,7 @@ async def cmd_start_admin(message: types.Message, id4me):
 
 
 @dp.message_handler(AuthCheck(), commands=['start'])
-async def cmd_start_user(message: types.Message, id4me):
+async def cmd_start_user(message: types.Message):
     """
     Conversation's entry point
     """
