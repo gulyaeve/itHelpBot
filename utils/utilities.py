@@ -3,7 +3,6 @@ from logging import log, INFO
 from aiogram import types
 
 from config import bot_admin
-# from utils import file_system
 from loader import bot
 import re
 

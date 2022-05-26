@@ -4,8 +4,6 @@ from aiogram import types
 from aiogram.dispatcher.filters import BoundFilter
 
 from loader import db, fourme
-# from utils import utilities
-# from backend_4me import check_admin
 
 
 class AdminCheck(BoundFilter):

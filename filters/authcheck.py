@@ -4,7 +4,6 @@ from aiogram import types
 from aiogram.dispatcher.filters import BoundFilter
 
 from loader import db
-# from utils import file_system
 
 
 class AuthCheck(BoundFilter):

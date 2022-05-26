@@ -7,7 +7,6 @@ from keyboards import keyboards
 
 from utils import utilities
 from loader import dp, fourme
-# from backend_4me import get_services, get_service_instance, get_subject, send_request
 from logging import log, INFO
 
 

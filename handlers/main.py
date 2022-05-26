@@ -4,7 +4,6 @@ from aiogram.dispatcher.filters import Text
 from logging import log, INFO
 from filters import AuthCheck, AdminCheck
 
-# from backend_4me import check_admin
 from loader import dp, fourme
 
 

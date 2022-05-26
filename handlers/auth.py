@@ -5,7 +5,6 @@ from aiogram.dispatcher.filters.state import StatesGroup, State
 from re import match
 from loader import dp, db, fourme
 from send_email import send_email
-# from backend_4me import get_id
 from random import randrange
 from logging import log, INFO
 from filters import AuthCheck
