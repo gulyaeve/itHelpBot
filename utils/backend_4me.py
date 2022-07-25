@@ -4,7 +4,15 @@ from logging import log, INFO
 from config import link, headers, id_for_request
 
 
-async def make_dict(r_json, key_name, value_name):
+async def make_dict(r_json: list, key_name: str, value_name: str) -> dict:
+    """
+    Parse answer(list of dict) from server and makes dict where keys equals key_name and values equals value_name
+
+    @param r_json: list of dict from server
+    @param key_name: name of keys to parse
+    @param value_name: name of value to parse
+    @return: dict object
+    """
     keys = []
     values = []
     for item in r_json:
@@ -22,7 +30,7 @@ class FourMe:
         self.headers = headers
         self.id_for_request = id_for_request
 
-    async def get_json(self, route):
+    async def get_json(self, route: str):
         """
         Send get request to host
         @param route: request link
@@ -83,11 +91,11 @@ class FourMe:
                     }}"""
         return await self.send_json(post_request, post_data)
 
-    async def check_admin(self, id4me):
+    async def check_admin(self, id4me: str):
         answer = await self.get_json(f'people/{id4me}/teams')
         return answer
 
-    async def get_requests_for_team(self, team):
+    async def get_requests_for_team(self, team: str):
         answer = await self.get_json(f'requests/open?team={team}')
         return answer
 

@@ -1,4 +1,5 @@
 FROM python:3.10.2-slim-bullseye
+ENV TZ="Europe/Moscow"
 
 WORKDIR /src
 
