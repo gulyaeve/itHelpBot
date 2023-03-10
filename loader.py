@@ -4,10 +4,13 @@ from aiogram import Bot, Dispatcher, types
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
 
 from utils.backend_4me import FourMe
-from config import telegram_token
+from config import telegram_token, proxy_url
 from utils.db_api.postgresql import Database
 
-bot = Bot(token=telegram_token, parse_mode=types.ParseMode.HTML)
+if proxy_url:
+    bot = Bot(token=telegram_token, parse_mode=types.ParseMode.HTML, proxy=proxy_url)
+else:
+    bot = Bot(token=telegram_token, parse_mode=types.ParseMode.HTML)
 storage = MemoryStorage()
 dp = Dispatcher(bot, storage=storage)
 db = Database()

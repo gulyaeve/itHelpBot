@@ -5,6 +5,7 @@ from environs import Env
 env = Env()
 env.read_env()
 
+proxy_url = env.str("PROXY_URL") if env.str("PROXY_URL") else ""
 # Telegram auth:
 telegram_token = env.str("TELEGRAM_API_TOKEN")
 
